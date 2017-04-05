@@ -1,0 +1,25 @@
+
+package git is installed...skipping install
+package build-essential is installed...skipping install
+package linux-headers-4.4.0-59-generic is installed...skipping install
+package ruby is installed...skipping install
+package ruby-dev is installed...skipping install
+package sqlite3 is installed...skipping install
+installing package inputenc
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+E: Unable to locate package inputenc
+package fontenc is installed...skipping install
+package listings is installed...skipping install
+installing package hyperref
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+E: Unable to locate package hyperref

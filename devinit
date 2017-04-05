@@ -1,0 +1,71 @@
+#!/bin/bash
+# devinit
+# Set up the development environment for docgen.
+# (assumes bash)
+
+declare -a debian_pkg
+debian_pkg[${#debian_pkg[@]}]='git'                        # version control client
+debian_pkg[${#debian_pkg[@]}]='build-essential'            # build dependencies
+debian_pkg[${#debian_pkg[@]}]="linux-headers-$(uname -r)"
+debian_pkg[${#debian_pkg[@]}]='ruby'
+debian_pkg[${#debian_pkg[@]}]='ruby-dev'
+debian_pkg[${#debian_pkg[@]}]='sqlite3'                    # database for docgen
+debian_pkg[${#debian_pkg[@]}]='inputenc'                   # kramdown LaTeX output
+debian_pkg[${#debian_pkg[@]}]='fontenc'         
+debian_pkg[${#debian_pkg[@]}]='listings'         
+debian_pkg[${#debian_pkg[@]}]='hyperref'         
+
+
+
+
+
+function identify_os {
+  THIS_OS=
+  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    THIS_OS='Linux'
+    identify_linux_package_manager
+  else
+    'Unsupported OS'  
+#   elif [[ "$OSTYPE" == "darwin"* ]]; then
+#     echo 'OSX detected'
+#   elif [[ "$OSTYPE" == "cygwin" ]]; then
+#     echo 'Cygwin detected'
+#   elif [[ "$OSTYPE" == "msys" ]]; then
+#     echo 'Mingw32 detected'
+#   elif [[ "$OSTYPE" == "freebsd"* ]]; then
+#     echo 'FreeBSD detected'
+#   else
+#     echo 'OS not identified'
+  fi
+}
+
+function identify_linux_package_manager {
+  if [[ $(which apt) ]]; then
+    PKG_MGR='apt'
+  elif [[ $(which yum) ]]; then
+  	PKG_MGR='yum'
+  fi
+}
+
+function install_packages {
+  echo '' > devinit.log
+  identify_os
+  for name in "${debian_pkg[@]}"
+  do
+    if [[ -n "$(dpkg -l | grep ${name})" ]]; then 
+      echo "package ${name} is installed...skipping install" >> devinit.log
+    else
+      echo "installing package ${name}" >> devinit.log
+      sudo apt install -y "$name" &>> devinit.log
+    fi 
+  done
+}
+
+function configure_postgresql {
+  $(sudo cp /etc/postgresql/*/main/postgresql.conf ./postgresql.conf.orig)
+  $(sudo cp /etc/postgresql/*/main/pg_hba.conf ./pg_hba.conf.orig)
+  $(sudo cp ./pg_hba.conf /etc/postgresql/*/main)
+  $(sudo sed -i "/#listen_addresses/c\listen_addresses = \'*\'" /etc/postgresql/*/main/postgresql.conf)
+}
+
+install_packages
