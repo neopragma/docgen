@@ -4,10 +4,11 @@ require_relative "./gen_text"
 require_relative "./gen_html"
 require_relative "./gen_latex"
 require_relative "./gen_pdf"
+require_relative "./settings"
 require_relative "./zip_utils"
 
 module Docgen
-  include Db, ZipUtils
+  include Db, Settings, ZipUtils
 
   def gen format_name, boilerplate, *template
   	content = apply_substitutions_to boilerplate
@@ -36,6 +37,10 @@ module Docgen
 
   def lookup key
     substitution_text_for key.gsub(/::/,'')
+  end
+
+  def settings name
+    @settings[name]
   end
 
 end

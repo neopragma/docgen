@@ -32,6 +32,14 @@ describe Docgen do
 
   end
 
+  describe 'reads configuration file' do
+
+    it 'loads configuration settings' do
+      expect(@docgen.settings('ziptemp')).to eq('ziptemp')
+    end
+
+  end
+
   describe 'handle expected errors' do
 
     it "raises RuntimeError when an unsupported output format is specified" do
@@ -59,8 +67,16 @@ describe Docgen do
       expect(Dir[File.join('ziptemp', '**', '*')]).to eq(expected_result)
     end
 
-  end
+    it 'creates a zip file with the contents of a directory' do
+      expected_entry_names = ["dir1/", "dir1/dir2/", "dir1/dir2/file3", "dir1/file2", "file1"]
+      source_dirname = 'spec/data/zipdir'
+      target_filename = 'spec/data/test.zip'
+      @docgen.zip(source_dirname, target_filename)
+      expect(File.exist?(target_filename)).to be true
+      expect(@docgen.zip_entries(target_filename)).to eq(expected_entry_names)
+    end
 
+  end
 
   describe 'text output' do
 
