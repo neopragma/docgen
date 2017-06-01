@@ -5,9 +5,9 @@ module Db
   def connect
     begin
       @conn = Sequel.connect('sqlite://docgen')
-      @substitutions = DB.from(:substitutions)
-    rescue 
-      puts 'connection error' 
+      @substitutions = @conn.from(:substitutions)
+    rescue Exeption => e
+      puts "Database connection error: #{e.message}"
     end
   end
 

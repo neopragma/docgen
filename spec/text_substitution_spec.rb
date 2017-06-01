@@ -1,81 +1,23 @@
 require "spec_helper"
 require "sequel"
 require "sqlite3"
+require_relative "./docgen_test"
+require_relative "./db_helper"
 
-class DocgenTest
-  include Docgen
-end
+include DbHelper
 
-describe Docgen do
+describe 'Basic text substitution' do
 
   before(:all) do
-  	DB = Sequel.connect('sqlite://docgen')
-  	@substitutions = DB.from(:substitutions)
-  	@substitutions.delete
-  	@substitutions.insert(:key => 'foo', :value => 'amazing')
-  	@substitutions.insert(:key => 'bar', :value => 'dismal')
+    load_basic_text_substitutions
   end
 
   after(:all) do
-  	DB.disconnect
+    disconnect
   end
 
   before(:each) do
     @docgen = DocgenTest.new
-  end
-
-  describe 'structural attributes' do
-
-    it "has a version number" do
-      expect(Docgen::VERSION).not_to be nil
-    end
-
-  end
-
-  describe 'reads configuration file' do
-
-    it 'loads configuration settings' do
-      expect(@docgen.settings('ziptemp')).to eq('ziptemp')
-    end
-
-  end
-
-  describe 'handle expected errors' do
-
-    it "raises RuntimeError when an unsupported output format is specified" do
-      expect{ @docgen.gen('foo', 'Content') }
-        .to raise_error(RuntimeError, /Unsupported output format: foo/)
-    end
-
-    it "raises RuntimeError when the specified template file can\'t be found" do
-      expect{ @docgen.gen('pdf', 'Content', 'nosuchtemplate') }
-        .to raise_error(RuntimeError, 'The specified template file nosuchtemplate does not exist')
-    end
-
-  end
-
-  describe 'zip and unzip' do
-
-    it 'reads the entries in a zip file' do
-      expected_content = ["this is the entry \'dir1/dir11/file111\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'dir1/file11\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'dir1/file12\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'dir2/dir21/dir221/file2221\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'dir2/file21\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'file1\' in my test archive!\n\nIt has only a few lines.\n"]
-      expect(@docgen.unzip('spec/data/zipWithDirs.zip')).to eq(expected_content)
-    end
-
-    it 'saves extracted files in a directory' do
-      expected_result = ["ziptemp/dir2", "ziptemp/dir2/file21", "ziptemp/dir2/dir21", "ziptemp/dir2/dir21/dir221", "ziptemp/dir2/dir21/dir221/file2221", "ziptemp/dir1", "ziptemp/dir1/file11", "ziptemp/dir1/dir11", "ziptemp/dir1/dir11/file111", "ziptemp/dir1/file12", "ziptemp/file1"]
-      @docgen.unzip('spec/data/zipWithDirs.zip')
-      expect(Dir[File.join('ziptemp', '**', '*')]).to eq(expected_result)
-    end
-
-    it 'creates a zip file with the contents of a directory' do
-      expected_entry_names = ["dir1/", "dir1/dir2/", "dir1/dir2/file3", "dir1/file2", "file1"]
-      source_dirname = 'spec/data/zipdir'
-      target_filename = 'spec/data/test.zip'
-      @docgen.zip(source_dirname, target_filename)
-      expect(File.exist?(target_filename)).to be true
-      expect(@docgen.zip_entries(target_filename)).to eq(expected_entry_names)
-    end
-
   end
 
   describe 'text output' do
