@@ -4,9 +4,10 @@ require_relative "./gen_text"
 require_relative "./gen_html"
 require_relative "./gen_latex"
 require_relative "./gen_pdf"
+require_relative "./zip_utils"
 
 module Docgen
-  include Db
+  include Db, ZipUtils
 
   def gen format_name, boilerplate, *template
   	content = apply_substitutions_to boilerplate

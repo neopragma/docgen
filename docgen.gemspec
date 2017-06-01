@@ -38,4 +38,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "kramdown", "~> 1.13"
   spec.add_dependency "prawn", "~> 2.1"
   spec.add_dependency "prawn-table", "~> 0.2"
+  spec.add_dependency "rubyzip", "~> 1.2.1"
 end

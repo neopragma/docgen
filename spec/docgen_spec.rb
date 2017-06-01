@@ -46,16 +46,27 @@ describe Docgen do
 
   end
 
+  describe 'zip and unzip' do
+
+    it 'reads the entries in a zip file' do
+      expected_content = ["this is the entry \'dir1/dir11/file111\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'dir1/file11\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'dir1/file12\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'dir2/dir21/dir221/file2221\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'dir2/file21\' in my test archive!\n\nIt has only a few lines.\n", "this is the entry \'file1\' in my test archive!\n\nIt has only a few lines.\n"]
+      expect(@docgen.unzip('spec/data/zipWithDirs.zip')).to eq(expected_content)
+    end
+
+    it 'saves extracted files in a directory' do
+      expected_result = ["ziptemp/dir2", "ziptemp/dir2/file21", "ziptemp/dir2/dir21", "ziptemp/dir2/dir21/dir221", "ziptemp/dir2/dir21/dir221/file2221", "ziptemp/dir1", "ziptemp/dir1/file11", "ziptemp/dir1/dir11", "ziptemp/dir1/dir11/file111", "ziptemp/dir1/file12", "ziptemp/file1"]
+      @docgen.unzip('spec/data/zipWithDirs.zip')
+      expect(Dir[File.join('ziptemp', '**', '*')]).to eq(expected_result)
+    end
+
+  end
+
+
   describe 'text output' do
 
     it "outputs plain text with no substitutions" do
       expect(@docgen.gen('text', 'Here is some text.'))
         .to eq('Here is some text.')  
-    end
-
-    it "outputs plain text with one substitution in the middle" do
-      expect(@docgen.gen('text', 'Here is ::foo:: text.'))
-        .to eq('Here is amazing text.')  
     end
 
     it "outputs plain text with one substitution in the middle" do
