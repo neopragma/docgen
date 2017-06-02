@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sqlite3", "~> 1.3"
   spec.add_dependency "sequel", "~> 4.43"
   spec.add_dependency "kramdown", "~> 1.13"
+  spec.add_dependency "nokogiri", "~> 1.7.2"
   spec.add_dependency "prawn", "~> 2.1"
   spec.add_dependency "prawn-table", "~> 0.2"
   spec.add_dependency "rubyzip", "~> 1.2.1"
