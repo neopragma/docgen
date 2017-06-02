@@ -1,0 +1,3 @@
+# Name of directory for temporary files during zip/unzip operations
+# relative to the project root directory
+ziptemp: ziptemp
