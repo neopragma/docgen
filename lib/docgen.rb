@@ -12,14 +12,14 @@ module Docgen
   include Db, Settings, ZipUtils
 
   # Apply customizations to a complex file type such as pptx, xlsx, docx, odp, ods, odt)
-  def process file_type, file_path
+  def process file_type, file_path, *template
     processor_class_name = "Process#{file_type.split('_').collect(&:capitalize).join}"
     begin
       processor = Object::const_get("#{processor_class_name}").new
     rescue NameError => e
       raise "Undefined processor class: #{processor_class_name}"
     end
-    processor.process file_path
+    processor.process file_path, template
   end
 
   # Substitute custom values for text placeholders

@@ -10,6 +10,8 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
   before(:all) do
     load_basic_pptx_substitutions
     @basic_pptx_file = 'spec/data/basic-presentation-with-placeholders.pptx'
+    @pptx_with_theme = 'spec/data/presentation-with-theme.pptx'
+    @pptx_replacement_theme = 'spec/data/replacement-theme.pptx'
     @temp_pptx_file = 'spec/data/temp.pptx'
   end
 
@@ -39,6 +41,19 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
       match_replacement_text_in modified_slide
     end  
     package.close
+  end
+
+  it 'replaces the theme in a powerpoint presentation (in zipped pptx)' do
+  	FileUtils.cp @pptx_with_theme, @temp_pptx_file
+  	@docgen.process 'pptx', @temp_pptx_file, @pptx_replacement_theme
+  	begin
+      package = Zip::File.open(@temp_pptx_file)
+      theme_entry = package.find_entry('ppt/theme/theme1.xml')
+      theme = Nokogiri::XML.parse(theme_entry.get_input_stream)
+      expect(theme.xpath('/a:theme').attr('name').value).to eq 'Berlin'
+    ensure
+      package.close
+    end  
   end
 
   private
