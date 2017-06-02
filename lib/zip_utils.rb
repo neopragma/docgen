@@ -1,14 +1,24 @@
 require 'fileutils'
 require 'zip'
+require_relative "./settings"
 
 module ZipUtils
 
   def unzip zipfile_name
-    FileUtils.rm_r "./ziptemp" if File.directory?("./ziptemp")
+    temp_dirname = @settings['ziptemp']
+    FileUtils.rm_r temp_dirname if File.directory?(temp_dirname)
     content = []
     Zip::File.open(zipfile_name) do |zip_file|
       zip_file.each do |entry|
-        entry.extract("./ziptemp/#{entry.name}")
+
+
+puts "extracting entry #{temp_dirname}/#{entry.name}"
+
+        entry.extract("#{temp_dirname}/#{entry.name}")
+
+
+puts "after extract call"
+
         input_stream = entry.get_input_stream
         content << input_stream.read unless input_stream == Zip::NullInputStream
       end  
