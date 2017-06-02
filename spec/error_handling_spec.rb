@@ -6,6 +6,11 @@ describe 'Error handling' do
     @docgen = DocgenTest.new
   end
 
+  it "raises RuntimeError when an undefined file type processor is specified" do
+    expect{ @docgen.process('foo', '') }
+      .to raise_error(RuntimeError, /Undefined processor class: ProcessFoo/)
+  end
+
   it "raises RuntimeError when an unsupported output format is specified" do
     expect{ @docgen.gen('foo', 'Content') }
       .to raise_error(RuntimeError, /Unsupported output format: foo/)

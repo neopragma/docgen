@@ -6,10 +6,23 @@ require_relative "./gen_latex"
 require_relative "./gen_pdf"
 require_relative "./settings"
 require_relative "./zip_utils"
+require_relative "./process_pptx"
 
 module Docgen
   include Db, Settings, ZipUtils
 
+  # Apply customizations to a complex file type such as pptx, xlsx, docx, odp, ods, odt)
+  def process file_type, file_path
+    processor_class_name = "Process#{file_type.split('_').collect(&:capitalize).join}"
+    begin
+      processor = Object::const_get("#{processor_class_name}").new
+    rescue NameError => e
+      raise "Undefined processor class: #{processor_class_name}"
+    end
+    processor.process file_path
+  end
+
+  # Substitute custom values for text placeholders
   def gen format_name, boilerplate, *template
   	content = apply_substitutions_to boilerplate
     get_formatter(format_name).format content, template
