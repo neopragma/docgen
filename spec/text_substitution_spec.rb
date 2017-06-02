@@ -1,6 +1,4 @@
 require "spec_helper"
-require "sequel"
-require "sqlite3"
 require_relative "./docgen_test"
 require_relative "./db_helper"
 

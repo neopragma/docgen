@@ -10,15 +10,7 @@ module ZipUtils
     content = []
     Zip::File.open(zipfile_name) do |zip_file|
       zip_file.each do |entry|
-
-
-puts "extracting entry #{temp_dirname}/#{entry.name}"
-
         entry.extract("#{temp_dirname}/#{entry.name}")
-
-
-puts "after extract call"
-
         input_stream = entry.get_input_stream
         content << input_stream.read unless input_stream == Zip::NullInputStream
       end  
