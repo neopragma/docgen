@@ -26,16 +26,19 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
     FileUtils.cp @basic_pptx_file, @temp_pptx_file
   end
 
-  it 'replaces placeholders with custom text on all slides (in zipped pptx)' do
-    @docgen.process 1, 'pptx', @temp_pptx_file
-    package = Zip::File.open(@temp_pptx_file)
-  	package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.each do |entry|
-      doc = package.find_entry(entry)
-      modified_slide = Nokogiri::XML.parse(doc.get_input_stream)
-      match_replacement_text_in modified_slide
-    end  
-    package.close
-  end
+    it 'replaces placeholders with custom text on all slides (in zipped pptx)' do
+      @docgen.process 1, 'pptx', @temp_pptx_file
+      begin
+        package = Zip::File.open(@temp_pptx_file)
+  	    package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.each do |entry|
+          doc = package.find_entry(entry)
+          modified_slide = Nokogiri::XML.parse(doc.get_input_stream)
+          match_replacement_text_in modified_slide
+        end
+      ensure    
+        package.close
+      end
+    end
 
   it 'replaces the theme in a powerpoint presentation from another pptx' do
   	FileUtils.cp @pptx_with_theme, @temp_pptx_file
