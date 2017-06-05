@@ -12,19 +12,19 @@ module Docgen
   include Db, Settings, ZipUtils
 
   # Apply customizations to a complex file type such as pptx, xlsx, docx, odp, ods, odt)
-  def process file_type, file_path, *template
+  def process document_set, file_type, file_path, *template
     processor_class_name = "Process#{file_type.split('_').collect(&:capitalize).join}"
     begin
       processor = Object::const_get("#{processor_class_name}").new
     rescue NameError => e
       raise "Undefined processor class: #{processor_class_name}"
     end
-    processor.process file_path, template
+    processor.process document_set, file_path, template
   end
 
   # Substitute custom values for text placeholders
-  def gen format_name, boilerplate, *template
-  	content = apply_substitutions_to boilerplate
+  def gen document_set, format_name, boilerplate, *template
+  	content = apply_substitutions_to document_set, boilerplate
     get_formatter(format_name).format content, template
   end
 
@@ -37,19 +37,19 @@ module Docgen
     end  
   end
 
-  def apply_substitutions_to boilerplate
+  def apply_substitutions_to document_set, boilerplate
     keys = boilerplate.scan(/(::.*?::)/m)
     return boilerplate unless keys.any?
     content = boilerplate
     keys.flatten!
     keys.each do |key|
-      content = content.gsub(key,lookup(key))
+      content = content.gsub(key,lookup(document_set, key))
     end
     content
   end
 
-  def lookup key
-    substitution_text_for key.gsub(/::/,'')
+  def lookup document_set, key
+    substitution_text_for document_set, key.gsub(/::/,'')
   end
 
   def settings name

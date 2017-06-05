@@ -29,12 +29,12 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
   it 'replaces placeholders with custom text on a slide (in single extracted xml file)' do
     original_slide = File.read('spec/data/pptx-slide-with-placeholders.xml', 
     	:encoding => 'utf-8')
-  	modified_slide = @docgen.gen('text', original_slide)
+  	modified_slide = @docgen.gen('default', 'text', original_slide)
   	match_replacement_text_in modified_slide
   end
 
   it 'replaces placeholders with custom text on all slides (in zipped pptx)' do
-    @docgen.process 'pptx', @temp_pptx_file
+    @docgen.process 'default', 'pptx', @temp_pptx_file
     package = Zip::File.open(@temp_pptx_file)
   	package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.each do |entry|
       doc = package.find_entry(entry)
@@ -46,7 +46,7 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
 
   it 'replaces the theme in a powerpoint presentation from another pptx' do
   	FileUtils.cp @pptx_with_theme, @temp_pptx_file
-  	@docgen.process 'pptx', @temp_pptx_file, @pptx_replacement_theme
+  	@docgen.process 'default', 'pptx', @temp_pptx_file, @pptx_replacement_theme
   	begin
       package = Zip::File.open(@temp_pptx_file)
       theme_entry = package.find_entry('ppt/theme/theme1.xml')
@@ -59,7 +59,7 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
 
   it 'replaces the theme in a powerpoint presentation from a potx template file' do
   	FileUtils.cp @pptx_with_theme, @temp_pptx_file
-  	@docgen.process 'pptx', @temp_pptx_file, @potx_theme
+  	@docgen.process 'default', 'pptx', @temp_pptx_file, @potx_theme
   	begin
       package = Zip::File.open(@temp_pptx_file)
       theme_entry = package.find_entry('ppt/theme/theme1.xml')
