@@ -28,6 +28,8 @@ module Docgen
     get_formatter(format_name).format content, template
   end
 
+  private
+
   def get_formatter format_name
   	formatter_class_name = "Gen#{format_name.split('_').collect(&:capitalize).join}"
     begin
