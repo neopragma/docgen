@@ -26,13 +26,6 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
     FileUtils.cp @basic_pptx_file, @temp_pptx_file
   end
 
-  it 'replaces placeholders with custom text on a slide (in single extracted xml file)' do
-    original_slide = File.read('spec/data/pptx-slide-with-placeholders.xml', 
-    	:encoding => 'utf-8')
-  	modified_slide = @docgen.gen('default', 'text', original_slide)
-  	match_replacement_text_in modified_slide
-  end
-
   it 'replaces placeholders with custom text on all slides (in zipped pptx)' do
     @docgen.process 'default', 'pptx', @temp_pptx_file
     package = Zip::File.open(@temp_pptx_file)
