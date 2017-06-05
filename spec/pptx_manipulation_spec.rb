@@ -26,6 +26,8 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
     FileUtils.cp @basic_pptx_file, @temp_pptx_file
   end
 
+  context 'text replacement on slides' do
+
     it 'replaces placeholders with custom text on all slides (in zipped pptx)' do
       @docgen.process 1, 'pptx', @temp_pptx_file
       begin
@@ -40,30 +42,36 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
       end
     end
 
-  it 'replaces the theme in a powerpoint presentation from another pptx' do
-  	FileUtils.cp @pptx_with_theme, @temp_pptx_file
-  	@docgen.process 1, 'pptx', @temp_pptx_file, @pptx_replacement_theme
-  	begin
-      package = Zip::File.open(@temp_pptx_file)
-      theme_entry = package.find_entry('ppt/theme/theme1.xml')
-      theme = Nokogiri::XML.parse(theme_entry.get_input_stream)
-      expect(theme.xpath('/a:theme').attr('name').value).to eq 'Berlin'
-    ensure
-      package.close
-    end  
   end
+  
+  context 'theme replacement in powerpoint packages' do  
 
-  it 'replaces the theme in a powerpoint presentation from a potx template file' do
-  	FileUtils.cp @pptx_with_theme, @temp_pptx_file
-  	@docgen.process 1, 'pptx', @temp_pptx_file, @potx_theme
-  	begin
-      package = Zip::File.open(@temp_pptx_file)
-      theme_entry = package.find_entry('ppt/theme/theme1.xml')
-      theme = Nokogiri::XML.parse(theme_entry.get_input_stream)
-      expect(theme.xpath('/a:theme').attr('name').value).to eq 'My Theme'
-    ensure
-      package.close
-    end  
+    it 'replaces the theme in a powerpoint presentation from another pptx' do
+  	  FileUtils.cp @pptx_with_theme, @temp_pptx_file
+  	  @docgen.process 1, 'pptx', @temp_pptx_file, @pptx_replacement_theme
+  	  begin
+        package = Zip::File.open(@temp_pptx_file)
+        theme_entry = package.find_entry('ppt/theme/theme1.xml')
+        theme = Nokogiri::XML.parse(theme_entry.get_input_stream)
+        expect(theme.xpath('/a:theme').attr('name').value).to eq 'Berlin'
+      ensure
+        package.close
+      end  
+    end
+
+    it 'replaces the theme in a powerpoint presentation from a potx template file' do
+  	  FileUtils.cp @pptx_with_theme, @temp_pptx_file
+  	  @docgen.process 1, 'pptx', @temp_pptx_file, @potx_theme
+  	  begin
+        package = Zip::File.open(@temp_pptx_file)
+        theme_entry = package.find_entry('ppt/theme/theme1.xml')
+        theme = Nokogiri::XML.parse(theme_entry.get_input_stream)
+        expect(theme.xpath('/a:theme').attr('name').value).to eq 'My Theme'
+      ensure
+        package.close
+      end  
+    end
+
   end
 
   private
