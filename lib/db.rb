@@ -16,9 +16,9 @@ module Db
   	@conn = nil
   end
 
-  def substitution_text_for set, key
+  def substitution_text_for set_id, key
     connect unless @conn
-    res = @substitutions.where(:set => set, :key => key).select(:value)
+    res = @substitutions.where(:set_id => set_id, :key => key).select(:value)
     res.get(:value)
   end
 

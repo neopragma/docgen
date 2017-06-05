@@ -21,32 +21,32 @@ describe 'Basic text substitution' do
   describe 'text output' do
 
     it "outputs plain text with no substitutions" do
-      expect(@docgen.gen('default', 'text', 'Here is some text.'))
+      expect(@docgen.gen(1, 'text', 'Here is some text.'))
         .to eq('Here is some text.')  
     end
 
     it "outputs plain text with one substitution in the middle" do
-      expect(@docgen.gen('default', 'text', 'Here is ::foo:: text.'))
+      expect(@docgen.gen(1, 'text', 'Here is ::foo:: text.'))
         .to eq('Here is amazing text.')  
     end
 
     it "outputs plain text with one substitution at the beginning" do
-      expect(@docgen.gen('default', 'text', '::foo:: text is here.'))
+      expect(@docgen.gen(1, 'text', '::foo:: text is here.'))
         .to eq('amazing text is here.')  
     end
 
     it "outputs plain text with one substitution at the end" do
-      expect(@docgen.gen('default', 'text', 'The text that is here is truly ::foo::.'))
+      expect(@docgen.gen(1, 'text', 'The text that is here is truly ::foo::.'))
         .to eq('The text that is here is truly amazing.')  
     end
 
     it "outputs plain text with two substitutions" do
-      expect(@docgen.gen('default', 'text', 'This text is ::foo::, but this text is ::bar::.'))
+      expect(@docgen.gen(1, 'text', 'This text is ::foo::, but this text is ::bar::.'))
         .to eq('This text is amazing, but this text is dismal.')  
     end
 
     it "outputs plain text with substitutions specific to a named set" do
-      expect(@docgen.gen('gcpd', 'text', 'This text is ::foo::, but this text is ::bar::.'))
+      expect(@docgen.gen(2, 'text', 'This text is ::foo::, but this text is ::bar::.'))
         .to eq('This text is Batman, but this text is Penguin.')  
     end
 
@@ -55,16 +55,16 @@ describe 'Basic text substitution' do
   describe 'html output' do
 
     it "outputs a single html paragraph with no substitutions" do
-      expect(@docgen.gen('default', 'html', 'Here is some text.')).to eq("<p>Here is some text.</p>\n")  
+      expect(@docgen.gen(1, 'html', 'Here is some text.')).to eq("<p>Here is some text.</p>\n")  
     end
 
     it "outputs some assorted html elements with no substitutions" do
-      expect(@docgen.gen('default', 'html', "# Heading level 1 {#head1}\n\nFoods:\n\n- pizza\n- fried eggs\n\nHave a nice day."))
+      expect(@docgen.gen(1, 'html', "# Heading level 1 {#head1}\n\nFoods:\n\n- pizza\n- fried eggs\n\nHave a nice day."))
       	.to eq("<h1 id=\"head1\">Heading level 1</h1>\n\n<p>Foods:</p>\n\n<ul>\n  <li>pizza</li>\n  <li>fried eggs</li>\n</ul>\n\n<p>Have a nice day.</p>\n")  
     end
 
     it "outputs some assorted html elements with substitutions" do
-      expect(@docgen.gen('default', 'html', "# Heading level 1 {#head1}\n\nFoods:\n\n- ::foo:: pizza\n- ::bar:: fried eggs\n\nHave a nice day."))
+      expect(@docgen.gen(1, 'html', "# Heading level 1 {#head1}\n\nFoods:\n\n- ::foo:: pizza\n- ::bar:: fried eggs\n\nHave a nice day."))
       	.to eq("<h1 id=\"head1\">Heading level 1</h1>\n\n<p>Foods:</p>\n\n<ul>\n  <li>amazing pizza</li>\n  <li>dismal fried eggs</li>\n</ul>\n\n<p>Have a nice day.</p>\n")  
     end
 
@@ -81,7 +81,7 @@ describe 'Basic text substitution' do
         "  </body>\n" \
         "</html>\n"
 
-      expect(@docgen.gen('default', 'html', 
+      expect(@docgen.gen(1, 'html', 
       	  "# Heading level 1 {#head1}\n\nFoods:\n\n- ::foo:: pizza\n- ::bar:: fried eggs\n\nHave a nice day.",
       	  'document'))
       	.to eq(expected_html_document)
@@ -92,16 +92,16 @@ describe 'Basic text substitution' do
   describe 'latex output' do
 
     it "outputs a single latex paragraph with no substitutions" do
-      expect(@docgen.gen('default', 'latex', 'Here is some text.')).to eq("Here is some text.\n\n")  
+      expect(@docgen.gen(1, 'latex', 'Here is some text.')).to eq("Here is some text.\n\n")  
     end
 
     it "outputs some assorted latex elements with no substitutions" do
-      expect(@docgen.gen('default', 'latex', "# Heading level 1 {#head1}\n\nFoods:\n\n- pizza\n- fried eggs\n\nHave a nice day."))
+      expect(@docgen.gen(1, 'latex', "# Heading level 1 {#head1}\n\nFoods:\n\n- pizza\n- fried eggs\n\nHave a nice day."))
       	.to eq("\\section{Heading level 1}\\hypertarget{head1}{}\\label{head1}\n\nFoods:\n\n\\begin{itemize}\n\\item pizza\n\\item fried eggs\n\\end{itemize}\n\nHave a nice day.\n\n")  
     end
 
     it "outputs some assorted latex elements with substitutions" do
-      expect(@docgen.gen('default', 'latex', "# Heading level 1 {#head1}\n\nFoods:\n\n- ::foo:: pizza\n- ::bar:: fried eggs\n\nHave a nice day."))
+      expect(@docgen.gen(1, 'latex', "# Heading level 1 {#head1}\n\nFoods:\n\n- ::foo:: pizza\n- ::bar:: fried eggs\n\nHave a nice day."))
       	.to eq("\\section{Heading level 1}\\hypertarget{head1}{}\\label{head1}\n\nFoods:\n\n\\begin{itemize}\n\\item amazing pizza\n\\item dismal fried eggs\n\\end{itemize}\n\nHave a nice day.\n\n")  
     end
 
@@ -156,7 +156,7 @@ describe 'Basic text substitution' do
         "\\end{document}" \
         "\n" 
 
-      expect(@docgen.gen('default', 'latex', 
+      expect(@docgen.gen(1, 'latex', 
       	    "# Heading level 1 {#head1}\n\nFoods:\n\n- ::foo:: pizza\n- ::bar:: fried eggs\n\nHave a nice day.",
       	    'document'))
       	.to eq(expected_latex_document)  
@@ -168,10 +168,10 @@ describe 'Basic text substitution' do
 
     it "outputs a pdf document with substitutions" do
 
-#      File.open('temp.pdf', 'w') {|f| f.write(@docgen.gen('default', pdf', 
+#      File.open('temp.pdf', 'w') {|f| f.write(@docgen.gen(1, pdf', 
 #      	    "# Heading level 1 {#head1}\n\nFoods:\n\n- ::foo:: pizza\n- ::bar:: fried eggs\n\nHave a nice day.")) }
 
-      expect(@docgen.gen('default', 'pdf', 
+      expect(@docgen.gen(1, 'pdf', 
       	    "# Heading level 1 {#head1}\n\nFoods:\n\n- ::foo:: pizza\n- ::bar:: fried eggs\n\nHave a nice day."))
       	.to match(/^%PDF-1\.3(.*)/)  
     end
