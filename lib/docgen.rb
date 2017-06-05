@@ -52,8 +52,4 @@ module Docgen
     substitution_text_for document_set, key.gsub(/::/,'')
   end
 
-  def settings name
-    @settings[name]
-  end
-
 end
