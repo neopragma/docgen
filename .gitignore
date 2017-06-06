@@ -8,4 +8,5 @@ temp.out
 /pkg/
 /spec/reports/
 /tmp/
+*temp.pptx
 .DS_Store
