@@ -6,6 +6,9 @@ require_relative "./settings"
 class ProcessPptx
   include Docgen, Db, Settings
 
+    PATH_TO_SLIDE_RELS = 'ppt/slides/_rels'
+    SLIDES_START_WITH = 'ppt/slides/slide'
+
   # 1. Insert one or more sets of slides into the pptx_file, if specified.
   # 2. Replace text placeholders with values for the document set. if any.
   # 3. Replace the presentation theme, if one is specified.
@@ -17,17 +20,20 @@ class ProcessPptx
   # into the pptx_file. Both those arguments are optional.
   def process document_set, pptx_file, *other_args
     parse_arguments other_args
-    @slides_start_with = 'ppt/slides/slide'
-    @tempdir = settings 'ziptemp'
-    package = Zip::File.open(pptx_file)
-    insert_slides_in package, other_args[0][0] if @insert_slides
-    apply_text_substitutions_to_slides_in document_set, package
-    replace_presentation_theme_in( package, @template ) unless @template == nil
-    package.close
+    initialize_work_files
+    begin
+      package = Zip::File.open(pptx_file)
+      insert_slides_in package, other_args[0][0] if @insert_slides
+      apply_text_substitutions_to_slides_in document_set, package
+      replace_presentation_theme_in( package, @template ) unless @template == nil
+    ensure
+      package.close
+    end
   end
 
   private
 
+  # other_args are arguments specific to pptx processing
   def parse_arguments other_args
     @template = nil
     @insert_slides = false
@@ -43,9 +49,13 @@ class ProcessPptx
     end  
   end
 
-  def insert_slides_in package, slide_sets
+  def initialize_work_files
+    @tempdir = settings 'ziptemp'
     FileUtils.rm_rf "#{@tempdir}"
-    FileUtils.mkdir_p "#{@tempdir}/ppt/slides/_rels"
+    FileUtils.mkdir_p "#{@tempdir}/#{PATH_TO_SLIDE_RELS}"
+  end
+
+  def insert_slides_in package, slide_sets
     insert_slide_entries_in package, slide_sets
     renumber_slides_after_insertion_in package
     add_rels_entries_after_insertion_in package
@@ -56,8 +66,8 @@ class ProcessPptx
   end  
 
   def insert_slide_entries_in package, slide_sets
-      @original_slide_count = package.entries.map(&:name).select{|i| i.start_with?(@slides_start_with)}.size
-      package.entries.map(&:name).select{|i| i.start_with?(@slides_start_with)}.sort.each do |original_entry_name|
+      @original_slide_count = package.entries.map(&:name).select{|i| i.start_with?(SLIDES_START_WITH)}.size
+      package.entries.map(&:name).select{|i| i.start_with?(SLIDES_START_WITH)}.sort.each do |original_entry_name|
         doc = package.find_entry(original_entry_name)
         original_slide = Nokogiri::XML.parse(doc.get_input_stream)
         slide_sets.each do |slide_set|
@@ -65,7 +75,7 @@ class ProcessPptx
           if pattern.match?(original_slide)
 
             slide_number = 0
-            slide_set.package.entries.map(&:name).select{|i| i.start_with?(@slides_start_with)}.sort.each do |entry_name|
+            slide_set.package.entries.map(&:name).select{|i| i.start_with?(SLIDES_START_WITH)}.sort.each do |entry_name|
 
               # ppt/slide entries from the source package
 
@@ -77,14 +87,14 @@ class ProcessPptx
           end
         end
       end       
-      @slide_count = package.entries.map(&:name).select{|i| i.start_with?(@slides_start_with)}.size
+      @slide_count = package.entries.map(&:name).select{|i| i.start_with?(SLIDES_START_WITH)}.size
   end
 
   def renumber_slides_after_insertion_in package
     slide_number = @slide_count
     package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.sort.reverse_each do |modified_entry_name|
-      name_start = modified_entry_name.slice(0..(modified_entry_name.index(@slides_start_with) + @slides_start_with.length))
-      package.rename(modified_entry_name, "#{@slides_start_with}#{slide_number}.xml") unless package.find_entry("#{@slides_start_with}#{slide_number}.xml")
+      name_start = modified_entry_name.slice(0..(modified_entry_name.index(SLIDES_START_WITH) + SLIDES_START_WITH.length))
+      package.rename(modified_entry_name, "#{SLIDES_START_WITH}#{slide_number}.xml") unless package.find_entry("#{SLIDES_START_WITH}#{slide_number}.xml")
       slide_number -= 1
     end
   end
@@ -99,9 +109,9 @@ class ProcessPptx
     slide_number = @slide_count
     @slide_count.times do
       FileUtils.rm extracted_file_name if File.exists? extracted_file_name
-      base_slide_rel_name = 'ppt/slides/_rels/slide1.xml.rels'
+      base_slide_rel_name = "#{PATH_TO_SLIDE_RELS}/slide1.xml.rels"
       package.extract base_slide_rel_name, extracted_file_name 
-      slide_rel_entry_name = "ppt/slides/_rels/slide#{slide_number}.xml.rels"
+      slide_rel_entry_name = "#{PATH_TO_SLIDE_RELS}/slide#{slide_number}.xml.rels"
       package.add slide_rel_entry_name, extracted_file_name unless package.find_entry slide_rel_entry_name
       slide_number -= 1
     end
