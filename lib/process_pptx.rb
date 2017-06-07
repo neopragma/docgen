@@ -40,6 +40,7 @@ class ProcessPptx
     FileUtils.mkdir_p "#{@tempdir}/ppt/slides/_rels"
     begin
       package = Zip::File.open(pptx_file)
+      @original_slide_count = package.entries.map(&:name).select{|i| i.start_with?(@slides_start_with)}.size
       package.entries.map(&:name).select{|i| i.start_with?(@slides_start_with)}.sort.each do |original_entry_name|
         doc = package.find_entry(original_entry_name)
         original_slide = Nokogiri::XML.parse(doc.get_input_stream)
@@ -56,14 +57,7 @@ class ProcessPptx
               slide_set.package.extract(entry_name, "#{@tempdir}/#{extracted_entry_name}")
               package.add("#{extracted_entry_name}", "#{@tempdir}/#{extracted_entry_name}")
 
-#temp
-              just_added = package.find_entry("#{extracted_entry_name}")
-puts "just added entry #{just_added.to_s}"
-
-# TODO: ppt/slides/_rels
-# TODO: ppt/slideLayouts
-# TODO: ppt/slideLayouts/_rels
-# TODO: ppt/presentation.xml
+#puts "inserted slide #{extracted_entry_name}"
 
               slide_number += 1
 
@@ -72,14 +66,100 @@ puts "just added entry #{just_added.to_s}"
         end
       end  
 
-      # renumbering the slides - this results in the correct numbering
-      # needs to modify related entries in the package that point to each other so that PowerPoint can show the slides
-      slide_number = package.entries.map(&:name).select{|i| i.start_with?(@slides_start_with)}.size
+      # renumber the slides
+     
+      slide_count = package.entries.map(&:name).select{|i| i.start_with?(@slides_start_with)}.size
+      slide_number = slide_count
       package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.sort.reverse_each do |modified_entry_name|
         name_start = modified_entry_name.slice(0..(modified_entry_name.index(@slides_start_with) + @slides_start_with.length))
+
+#puts "renaming #{modified_entry_name} to #{@slides_start_with}#{slide_number}.xml"
+
         package.rename(modified_entry_name, "#{@slides_start_with}#{slide_number}.xml") unless package.find_entry("#{@slides_start_with}#{slide_number}.xml")
         slide_number -= 1
       end
+
+# First attempt: Add ppt/slides/_rels/slideN.xml.rels with <Relatioship Id="rId1" ... Target="../slideLayouts/slideLayout1.xml">
+# for all entries in ppt/slides. That is, copy the entry ppt/slides/_rels/slide1.xml.rels from the original deck for each new entry.
+# This will probably not be accurate for complicated slide decks. All rels point to rId1 and slideLayout1
+# in the simple test deck I made for purposes of this rspec example. Inserted slides don't automatically have a corresponding entry in
+# ppt/slides/_rels. (Note to self: Extract this info to the project wiki once the details have been worked out.)
+
+      extracted_file_name = "#{@tempdir}/base_slide_rel_name"
+      slide_number = slide_count
+      slide_count.times do
+        FileUtils.rm extracted_file_name if File.exists? extracted_file_name
+        base_slide_rel_name = 'ppt/slides/_rels/slide1.xml.rels'
+        package.extract base_slide_rel_name, extracted_file_name 
+        slide_rel_entry_name = "ppt/slides/_rels/slide#{slide_number}.xml.rels"
+        package.add slide_rel_entry_name, extracted_file_name unless package.find_entry slide_rel_entry_name
+        slide_number -= 1
+      end
+
+
+# TODO: ppt/_rels/presentation.xml.rels
+
+
+
+      
+
+      # ppt/presentation.xml contains malformed XML. Entries are prefixed with namepace names, but they aren't declared.
+      # Some rigamarole is necessary to work around this.
+
+      # Extract the presentation.xml entry from the pptx package using rubyzip
+      presentation_entry_name = 'ppt/presentation.xml' 
+      temp_file_name = "#{@tempdir}/presentation.xml"
+      FileUtils.rm temp_file_name if File.exists? temp_file_name
+      package.extract presentation_entry_name, temp_file_name
+
+      # Get the raw text from the extracted file. 
+      # Remove newlines as these will be converted into useless XML text nodes by Nokogiri.
+      raw_text = IO.read(temp_file_name).gsub(/\n/,'')
+
+      # Replace the namespace prefix delimiters with plain text so Nokogiri can process the XML. 
+      # This will change 'p:presentation' to 'p__presentation' and so forth. 
+      # This is a workaround for the fact the namespaces aren't declared in the presentation.xml file.
+      modified_text = raw_text.gsub(/:/,'__')
+
+      # Make a Nokogiri document out of the munged XML text.
+      xml_doc = Nokogiri::XML(modified_text)
+
+      # Get the last sldId element in the document and save the id and r:id values so we can increment them. 
+      # The id value is an integer as a string. The r:id value looks like 'rId8'.
+      last_sldId_element = xml_doc.xpath("//p__presentation/p__sldIdLst").last.last_element_child
+      last_sldId_id_value = last_sldId_element['id'].to_i
+      last_sldId_rid_value = last_sldId_element['r__id']
+      last_sldId_rid_value = last_sldId_rid_value[3..last_sldId_rid_value.length].to_i
+
+      # ppt/presentation.xml needs a p:sldId element for each slide in the deck. 
+      # For now, we're going to increment the id and r:id values and add an element for each new slide.
+      # This may or may not be sufficient for more-complicated pptx files.
+      sldId_count = slide_count - @original_slide_count
+      slide_number = @original_slide_count + 1
+      sldId_count.times do 
+        # increment the id values and create a new child element under p:presentation/p:sldIdLst
+        last_sldId_id_value += 1
+        last_sldId_rid_value += 1
+        sldId_rid_value_str = 'rId' + last_sldId_rid_value.to_s
+        sldId_node = Nokogiri::XML::Node.new('p__sldId',xml_doc)
+        sldId_node['id'] = last_sldId_id_value.to_s
+        sldId_node['r__id'] = sldId_rid_value_str
+
+        xml_doc.xpath("//p__presentation/p__sldIdLst")[0] << sldId_node  
+
+        slide_number += 1
+      end
+      
+      # Reverse the text replacement to restore the namespace prefixes.
+      updated_xml = xml_doc.to_s.gsub(/__/,':')
+      FileUtils.rm temp_file_name
+      new_presentation_xml = File.open(temp_file_name, "w")
+      new_presentation_xml.puts updated_xml
+      new_presentation_xml.close 
+
+      # Replace the ppt/presentation.xml entry in the pptx with the modified one.
+
+      package.replace presentation_entry_name, temp_file_name
 
 
 

@@ -79,8 +79,8 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
   end
 
   context "slide insertion in powerpoint packages" do
-
-    pending 'inserts slides at defined insertion points in the pptx file' do
+    
+    it 'inserts slides at defined insertion points in the pptx file' do
       # setup
       FileUtils.cp @insertion_target_pptx, @temp_pptx_file
       slide_sets = [ 
@@ -107,11 +107,20 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
       slide_index = 0
       begin 
         package = Zip::File.open(@temp_pptx_file)
-        package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.sort.each do |entry|
-          doc = package.find_entry(entry)
-          current_slide = Nokogiri::XML.parse(doc.get_input_stream)
+#        package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.sort.each do |entry_name|
 
-puts "slide_index is #{slide_index}"
+#puts "expected_slide_order.size is #{expected_slide_order.size}"
+
+         expected_slide_order.size.times do
+#          doc = package.find_entry(entry_name)
+          slide_number = slide_index +1
+
+#puts "looking up slide number #{slide_number}"
+
+          entry = package.find_entry("ppt/slides/slide#{slide_number}.xml")
+          current_slide = Nokogiri::XML.parse(entry.get_input_stream)
+
+#puts "Found entry #{entry}, matching on #{expected_slide_order[slide_index]}"
 
           expect(current_slide).to match /#{expected_slide_order[slide_index]}/ 
           slide_index += 1
