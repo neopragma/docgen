@@ -2,6 +2,7 @@ require "spec_helper"
 require 'nokogiri'
 require_relative "./docgen_test"
 require_relative "./db_helper"
+require_relative "../lib/slide_set"
 
 include DbHelper
 
@@ -14,6 +15,9 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
     @potx_theme = 'spec/data/my-theme.potx'
     @pptx_replacement_theme = 'spec/data/replacement-theme.pptx'
     @temp_pptx_file = 'spec/data/temp.pptx'
+    @insertion_target_pptx = 'spec/data/insertion_target.pptx'
+    @source_pptx_1 = 'spec/data/group_1_slides_for_insertion.pptx'
+    @source_pptx_2 = 'spec/data/group_2_slides_for_insertion.pptx'
   end
 
   after(:all) do
@@ -73,6 +77,51 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
     end
 
   end
+
+  context "slide insertion in powerpoint packages" do
+
+    pending 'inserts slides at defined insertion points in the pptx file' do
+      # setup
+      FileUtils.cp @insertion_target_pptx, @temp_pptx_file
+      slide_sets = [ 
+        SlideSet.new("Insertion point 1", Zip::File.open(@source_pptx_1)),
+        SlideSet.new("Insertion point 2", Zip::File.open(@source_pptx_2))
+      ]
+
+      # action
+      @docgen.process 1, 'pptx', @temp_pptx_file, slide_sets
+
+      # check
+      expected_slide_order = [ 
+        "Test deck", 
+        "Base slide 1", 
+        "Insertion point 1",
+        "Group 1 slide 1",
+        "Group 1 slide 2",
+        "Base slide 2",
+        "Insertion point 2",
+        "Group 2 slide 1",
+        "Group 2 slide 2",
+        "Base slide 3" ]
+
+      slide_index = 0
+      begin 
+        package = Zip::File.open(@temp_pptx_file)
+        package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.sort.each do |entry|
+          doc = package.find_entry(entry)
+          current_slide = Nokogiri::XML.parse(doc.get_input_stream)
+
+puts "slide_index is #{slide_index}"
+
+          expect(current_slide).to match /#{expected_slide_order[slide_index]}/ 
+          slide_index += 1
+        end
+      ensure
+        package.close        
+      end
+    end
+
+  end  
 
   private
 

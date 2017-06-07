@@ -11,15 +11,16 @@ require_relative "./process_pptx"
 module Docgen
   include Db, Settings, ZipUtils
 
-  # Apply customizations to a complex file type such as pptx, xlsx, docx, odp, ods, odt)
-  def process document_set, file_type, file_path, *template
+  # Apply customizations to a complex file type such as pptx, xlsx, docx, odp, ods, odt).
+  # "other_args" will be interpreted differently by the processor for each file type.
+  def process document_set, file_type, file_path, *other_args
     processor_class_name = "Process#{file_type.split('_').collect(&:capitalize).join}"
     begin
       processor = Object::const_get("#{processor_class_name}").new
     rescue NameError => e
       raise "Undefined processor class: #{processor_class_name}"
     end
-    processor.process document_set, file_path, template
+    processor.process document_set, file_path, other_args
   end
 
   # Substitute custom values for text placeholders

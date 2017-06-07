@@ -1,4 +1,7 @@
 temp.out
+*temp.pptx
+~*
+.~*
 /.bundle/
 /.yardoc
 /Gemfile.lock
@@ -8,5 +11,4 @@ temp.out
 /pkg/
 /spec/reports/
 /tmp/
-*temp.pptx
 .DS_Store
