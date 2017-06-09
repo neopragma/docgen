@@ -80,6 +80,7 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
 
   context "slide insertion in powerpoint packages" do
     
+    pending 'needs refinement'
     it 'inserts slides at defined insertion points in the pptx file' do
       # setup
       FileUtils.cp @insertion_target_pptx, @temp_pptx_file
@@ -107,22 +108,51 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
       slide_index = 0
       begin 
         package = Zip::File.open(@temp_pptx_file)
-#        package.entries.map(&:name).select{|i| i.start_with?('ppt/slides/slide')}.sort.each do |entry_name|
-
-#puts "expected_slide_order.size is #{expected_slide_order.size}"
-
          expected_slide_order.size.times do
-#          doc = package.find_entry(entry_name)
           slide_number = slide_index +1
-
-#puts "looking up slide number #{slide_number}"
 
           entry = package.find_entry("ppt/slides/slide#{slide_number}.xml")
           current_slide = Nokogiri::XML.parse(entry.get_input_stream)
-
-#puts "Found entry #{entry}, matching on #{expected_slide_order[slide_index]}"
-
           expect(current_slide).to match /#{expected_slide_order[slide_index]}/ 
+
+          # Here's the fun part:
+          # ppt/_rels/presentation.xml.rels
+          #   Relationship[@Id] for the current slide
+          #     points to ppt/slides/_rels/slidex.xml.rels / Relationship[@Id] 
+          #       and
+          #     points to ppt/presentation.xml / p:sldId[@r:id]
+          #   Relationship[@Target]
+          #     points to the current slide entry ppt/slides/slidex.xml
+          # ppt/presentation.xml / p:sldId[@id]
+          #     points to
+
+          rels_entry = package.find_entry('ppt/_rels/presentation.xml.rels')
+
+          # Workaround for Nokogiri:
+          # It can't handle the attribute name 'xmlns' in the xml text, xpath won't work.
+          # If we reverse the letters, xpath works. Unicorns.
+          rels_text = rels_entry.get_input_stream.read
+          rels_text.gsub!(/xmlns/,'snlmx')
+          rels_xml = Nokogiri::XML.parse(rels_text)
+          rels_id = rels_xml.xpath "/Relationships/Relationship[@Target=\"slides/slide#{slide_number}.xml\"]/@Id"
+
+# puts "slide_number: #{slide_number}"
+# puts "rels_id: #{rels_id}"
+
+          # Workaround for nokogiri:
+          # The presentation.xml member doesn't have declarations of its namespaces. Nokogiri complains. 
+          # If we use Nokogiri's remove_namespaces, there are collisions with the attribute name 'id'.
+
+          # TODO: Figure out what to verify here
+
+          # presentation_entry = package.find_entry('ppt/presentation.xml')
+          # presentation_text = presentation_entry.get_input_stream.read
+          # presentation_text.gsub!(/p:/,'p__').gsub!(/r:/,'r__')
+          # presentation_xml = Nokogiri::XML.parse(presentation_text)
+
+
+#          expect(true).to be true
+
           slide_index += 1
         end
       ensure

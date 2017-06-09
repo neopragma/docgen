@@ -112,30 +112,54 @@ class ProcessPptx
     end
   end
 
-  # ppt/_rels/presentation.xml.rels contains entries that look like this:
-  # <Relationship Id="rId3" Type="..." Target="slides/slide1.xml"/>
-  # The values for Id must correspond with the values of <p:sldId ... r:id> in ppt/presentation.xml
-  # For now, based on a simple pptx file, we assume Relationship Id numbers are 2 higher than the slide numbers.
-  # rId1 appears to be for the theme1.xml entry, and rId2 appears to be for the slideMaster1.xml entry.
+  # Add elements in ppt/_rels/presentation.xml.rels for the inserted slides
+  # Increment Id value and slide number from the last Relationship node for a slide
   def update_presentation_rels_in package
     rels_entry_name = "#{PATH_TO_PPT_RELS}/#{PRESENTATION_XML_RELS}"
     temp_file_name = "#{@tempdir}/#{PRESENTATION_XML_RELS}"
     remove_file temp_file_name
     package.extract rels_entry_name, temp_file_name
-    raw_text = get_raw_xml_text_from temp_file_name
 
-# TODO: Update presentation.xml.rels
-
+    raw_text = get_text_from temp_file_name
+    # Nokogiri can't handle the xmlns attribute on the Relationships node
+    raw_text.gsub!(/xmlns/,'snlmx')
+    xml_doc = xml_doc_from raw_text
+    last_relationship = xml_doc.xpath('/Relationships/Relationship[starts-with(@Target, "slides/slide")]').last
+    last_id_value = last_relationship['Id'] # Id value looks like 'rId8' (ugh!)
+    last_id_value = last_id_value[3..last_id_value.length].to_i
+    last_slide_number = last_relationship['Target'].gsub(/slides\/slide/,'').gsub(/.xml/,'').to_i
+    rels_type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide"
+    
+    # Add a Relationship element for each new slide inserted into the deck. 
+    rels_count = @slide_count - @original_slide_count
+    slide_number = @original_slide_count + 1
+    rels_count.times do 
+      last_id_value += 1
+      last_id_value_str = 'rId' + last_id_value.to_s
+      rels_node = Nokogiri::XML::Node.new('Relationship',xml_doc)
+      rels_node['Id'] = last_id_value_str
+      rels_node['Type'] = rels_type
+      rels_node['Target'] = "slides/slide#{slide_number.to_s}.xml"
+      xml_doc.xpath('//Relationships/Relationship').last.add_next_sibling(rels_node)
+      slide_number += 1
+    end
+    updated_xml = xml_doc.to_s.gsub(/snlmx/,'xmlns')  # reverse the workaround for Nokogiri
+    remove_file temp_file_name
+    new_rels_xml = File.open(temp_file_name, "w")
+    new_rels_xml.puts updated_xml
+    new_rels_xml.close 
+    package.replace rels_entry_name, temp_file_name
   end
 
+  # Add elements to ppt/presentation.xml for the inserted slides
   def update_presentation_xml_entry_in package
     presentation_entry_name = "#{PATH_TO_PPT}/#{PRESENTATION_XML}"
     temp_file_name = "#{@tempdir}/#{PRESENTATION_XML}"
     remove_file temp_file_name
     package.extract presentation_entry_name, temp_file_name
-    raw_text = get_raw_xml_text_from temp_file_name
+    raw_text = get_text_from temp_file_name
     modified_text = raw_text.gsub(/:/,'__') # workaround - namespaces not declared in presentation.xml
-    xml_doc = Nokogiri::XML(modified_text)
+    xml_doc = xml_doc_from modified_text
 
     # Start with the last sldId element in the document
     last_sldId_element = xml_doc.xpath("//p__presentation/p__sldIdLst").last.last_element_child
@@ -185,8 +209,12 @@ class ProcessPptx
     theme_source.close
   end
 
-  def get_raw_xml_text_from file_name
+  def get_text_from file_name
     IO.read(file_name).gsub(/\n/,'')
+  end
+
+  def xml_doc_from text
+    Nokogiri::XML(text) { |config| config.strict }
   end
 
   def initialize_work_files
