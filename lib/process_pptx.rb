@@ -3,21 +3,19 @@ require_relative "./docgen"
 require_relative "./db"
 require_relative "./settings"
 
+# 1. Insert one or more sets of slides into the pptx_file, if specified.
+# 2. Replace text placeholders with values for the document set, if any.
+# 3. Replace the presentation theme, if one is specified.
 class ProcessPptx
   include Docgen, Db, Settings
 
+    PATH_TO_PPT = 'ppt'
+    PATH_TO_PPT_RELS = 'ppt/_rels'
     PATH_TO_SLIDE_RELS = 'ppt/slides/_rels'
     SLIDES_START_WITH = 'ppt/slides/slide'
+    PRESENTATION_XML = 'presentation.xml'
+    PRESENTATION_XML_RELS = 'presentation.xml.rels'
 
-  # 1. Insert one or more sets of slides into the pptx_file, if specified.
-  # 2. Replace text placeholders with values for the document set. if any.
-  # 3. Replace the presentation theme, if one is specified.
-  #
-  # other_args may contain the path to a template file containing a theme
-  #
-  # and/or an array of SlideSet objects containing slides to be inserted
-  #
-  # into the pptx_file. Both those arguments are optional.
   def process document_set, pptx_file, *other_args
     parse_arguments other_args
     initialize_work_files
@@ -34,6 +32,11 @@ class ProcessPptx
   private
 
   # other_args are arguments specific to pptx processing
+  #
+  # other_args may contain one or both of:
+  # - the path to a template file (potx or ppts) containing a theme
+  # - an array of SlideSet objects containing slides to be inserted
+  #   into the pptx_file. Both those arguments are optional.
   def parse_arguments other_args
     @template = nil
     @insert_slides = false
@@ -49,19 +52,11 @@ class ProcessPptx
     end  
   end
 
-  def initialize_work_files
-    @tempdir = settings 'ziptemp'
-    FileUtils.rm_rf "#{@tempdir}"
-    FileUtils.mkdir_p "#{@tempdir}/#{PATH_TO_SLIDE_RELS}"
-  end
-
   def insert_slides_in package, slide_sets
     insert_slide_entries_in package, slide_sets
     renumber_slides_after_insertion_in package
     add_rels_entries_after_insertion_in package
-
-# TODO: ppt/_rels/presentation.xml.rels
-
+    update_presentation_rels_in package
     update_presentation_xml_entry_in package
   end  
 
@@ -99,16 +94,16 @@ class ProcessPptx
     end
   end
 
-  def add_rels_entries_after_insertion_in package
 # First attempt: Add ppt/slides/_rels/slideN.xml.rels with <Relatioship Id="rId1" ... Target="../slideLayouts/slideLayout1.xml">
 # for all entries in ppt/slides. That is, copy the entry ppt/slides/_rels/slide1.xml.rels from the original deck for each new entry.
 # This will probably not be accurate for complicated slide decks. All rels point to rId1 and slideLayout1
 # in the simple test deck I made for purposes of this rspec example. Inserted slides don't automatically have a corresponding entry in
 # ppt/slides/_rels. (Note to self: Extract this info to the project wiki once the details have been worked out.)
+  def add_rels_entries_after_insertion_in package
     extracted_file_name = "#{@tempdir}/base_slide_rel_name"
     slide_number = @slide_count
     @slide_count.times do
-      FileUtils.rm extracted_file_name if File.exists? extracted_file_name
+      remove_file extracted_file_name
       base_slide_rel_name = "#{PATH_TO_SLIDE_RELS}/slide1.xml.rels"
       package.extract base_slide_rel_name, extracted_file_name 
       slide_rel_entry_name = "#{PATH_TO_SLIDE_RELS}/slide#{slide_number}.xml.rels"
@@ -117,38 +112,38 @@ class ProcessPptx
     end
   end
 
+  # ppt/_rels/presentation.xml.rels contains entries that look like this:
+  # <Relationship Id="rId3" Type="..." Target="slides/slide1.xml"/>
+  # The values for Id must correspond with the values of <p:sldId ... r:id> in ppt/presentation.xml
+  # For now, based on a simple pptx file, we assume Relationship Id numbers are 2 higher than the slide numbers.
+  # rId1 appears to be for the theme1.xml entry, and rId2 appears to be for the slideMaster1.xml entry.
+  def update_presentation_rels_in package
+    rels_entry_name = "#{PATH_TO_PPT_RELS}/#{PRESENTATION_XML_RELS}"
+    temp_file_name = "#{@tempdir}/#{PRESENTATION_XML_RELS}"
+    remove_file temp_file_name
+    package.extract rels_entry_name, temp_file_name
+    raw_text = get_raw_xml_text_from temp_file_name
+
+# TODO: Update presentation.xml.rels
+
+  end
+
   def update_presentation_xml_entry_in package
-    # ppt/presentation.xml contains malformed XML. Entries are prefixed with namepace names, but they aren't declared.
-    # Some rigamarole is necessary to work around this.
-
-    # Extract the presentation.xml entry from the pptx package using rubyzip
-    presentation_entry_name = 'ppt/presentation.xml' 
-    temp_file_name = "#{@tempdir}/presentation.xml"
-    FileUtils.rm temp_file_name if File.exists? temp_file_name
+    presentation_entry_name = "#{PATH_TO_PPT}/#{PRESENTATION_XML}"
+    temp_file_name = "#{@tempdir}/#{PRESENTATION_XML}"
+    remove_file temp_file_name
     package.extract presentation_entry_name, temp_file_name
-
-    # Get the raw text from the extracted file. 
-    # Remove newlines as these will be converted into useless XML text nodes by Nokogiri.
-    raw_text = IO.read(temp_file_name).gsub(/\n/,'')
-
-    # Replace the namespace prefix delimiters with plain text so Nokogiri can process the XML. 
-    # This will change 'p:presentation' to 'p__presentation' and so forth. 
-    # This is a workaround for the fact the namespaces aren't declared in the presentation.xml file.
-    modified_text = raw_text.gsub(/:/,'__')
-
-    # Make a Nokogiri document out of the munged XML text.
+    raw_text = get_raw_xml_text_from temp_file_name
+    modified_text = raw_text.gsub(/:/,'__') # workaround - namespaces not declared in presentation.xml
     xml_doc = Nokogiri::XML(modified_text)
 
-    # Get the last sldId element in the document and save the id and r:id values so we can increment them. 
-    # The id value is an integer as a string. The r:id value looks like 'rId8'.
+    # Start with the last sldId element in the document
     last_sldId_element = xml_doc.xpath("//p__presentation/p__sldIdLst").last.last_element_child
     last_sldId_id_value = last_sldId_element['id'].to_i
-    last_sldId_rid_value = last_sldId_element['r__id']
+    last_sldId_rid_value = last_sldId_element['r__id'] # r:id value looks like 'rId8' (ugh!)
     last_sldId_rid_value = last_sldId_rid_value[3..last_sldId_rid_value.length].to_i
 
-    # ppt/presentation.xml needs a p:sldId element for each slide in the deck. 
-    # For now, we're going to increment the id and r:id values and add an element for each new slide.
-    # This may or may not be sufficient for more-complicated pptx files.
+    # Add a p:sldId element for each new slide inserted into the deck. 
     sldId_count = @slide_count - @original_slide_count
     slide_number = @original_slide_count + 1
     sldId_count.times do 
@@ -163,14 +158,11 @@ class ProcessPptx
       slide_number += 1
     end
       
-    # Reverse the text replacement to restore the namespace prefixes.
-    updated_xml = xml_doc.to_s.gsub(/__/,':')
-    FileUtils.rm temp_file_name
+    updated_xml = xml_doc.to_s.gsub(/__/,':') # reverse the workaround for namespace prefixes
+    remove_file temp_file_name
     new_presentation_xml = File.open(temp_file_name, "w")
     new_presentation_xml.puts updated_xml
     new_presentation_xml.close 
-
-    # Replace the ppt/presentation.xml entry in the pptx with the modified one.
     package.replace presentation_entry_name, temp_file_name
   end
 
@@ -191,6 +183,20 @@ class ProcessPptx
     original_theme = package.find_entry(theme_entry_name)
     package.get_output_stream(original_theme) { |f| f << replacement_theme.to_s }
     theme_source.close
+  end
+
+  def get_raw_xml_text_from file_name
+    IO.read(file_name).gsub(/\n/,'')
+  end
+
+  def initialize_work_files
+    @tempdir = settings 'ziptemp'
+    FileUtils.rm_rf "#{@tempdir}"
+    FileUtils.mkdir_p "#{@tempdir}/#{PATH_TO_SLIDE_RELS}"
+  end
+
+  def remove_file file_name   
+    FileUtils.rm file_name if File.exists? file_name
   end
 
 end
