@@ -61,11 +61,4 @@ function install_packages {
   done
 }
 
-#function configure_postgresql {
-#  $(sudo cp /etc/postgresql/*/main/postgresql.conf ./postgresql.conf.orig)
-#  $(sudo cp /etc/postgresql/*/main/pg_hba.conf ./pg_hba.conf.orig)
-#  $(sudo cp ./pg_hba.conf /etc/postgresql/*/main)
-#  $(sudo sed -i "/#listen_addresses/c\listen_addresses = \'*\'" /etc/postgresql/*/main/postgresql.conf)
-#}
-
 install_packages
