@@ -4,6 +4,8 @@ require_relative "./settings"
 module Db
   include Settings
 
+  DEFAULT = 'default'
+
   def connect dbname
     if File.exist?(dbname)
       @conn = Sequel.connect("sqlite://#{dbname}")
@@ -27,8 +29,20 @@ module Db
       .get(:value)
   end
 
+  def default_substitutions
+    substitutions_for DEFAULT
+  end
+
+  def substitutions_for set_name
+    auto_connect
+    @conn[:substitutions].select(:key, :value)
+      .where(:set_id => @conn[:document_sets].select(:id).where(:name => set_name))
+      .order(:key)
+      .all
+  end
+
   def default_artifacts
-    artifacts_for 'default'
+    artifacts_for DEFAULT
   end
 
   def artifacts_for set_name

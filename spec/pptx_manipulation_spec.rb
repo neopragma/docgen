@@ -9,7 +9,6 @@ include DbHelper
 describe 'Microsoft PowerPoint (.pptx) manipulation' do
 
   before(:all) do
-    load_basic_pptx_substitutions
     @basic_pptx_file = 'spec/data/basic-presentation-with-placeholders.pptx'
     @pptx_with_theme = 'spec/data/presentation-with-theme.pptx'
     @potx_theme = 'spec/data/my-theme.potx'
@@ -18,10 +17,6 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
     @insertion_target_pptx = 'spec/data/insertion_target.pptx'
     @source_pptx_1 = 'spec/data/group_1_slides_for_insertion.pptx'
     @source_pptx_2 = 'spec/data/group_2_slides_for_insertion.pptx'
-  end
-
-  after(:all) do
-    disconnect
   end
 
   before(:each) do
@@ -166,7 +161,7 @@ describe 'Microsoft PowerPoint (.pptx) manipulation' do
 
   def match_replacement_text_in modified_slide
   	expect(modified_slide).to match(/Mom and Pop Stores/)
-  	expect(modified_slide).to match(/Copyright \u00A9 2017/)
+  	expect(modified_slide).to match(/Copyright \\u00A9 2017/)
   	expect(modified_slide).to match(/Custom bullet point one/)
   	expect(modified_slide).to match(/Custom bullet point two/)
   	expect(modified_slide).to match(/Custom bullet point three/)

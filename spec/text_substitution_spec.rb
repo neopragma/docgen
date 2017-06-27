@@ -6,14 +6,6 @@ include DbHelper
 
 describe 'Basic text substitution' do
 
-  before(:all) do
-    load_basic_text_substitutions
-  end
-
-  after(:all) do
-    disconnect
-  end
-
   before(:each) do
     @docgen = DocgenTest.new
   end
