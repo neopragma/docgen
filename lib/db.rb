@@ -2,12 +2,13 @@ require 'sqlite3'
 
 module Db
 
-  def connect
-    begin
-      @conn = Sequel.connect('sqlite://docgen')
+  def connect dbname
+    if File.exist?(dbname)
+      @conn = Sequel.connect("sqlite://#{dbname}")
       @substitutions = @conn.from(:substitutions)
-    rescue Exeption => e
-      puts "Database connection error: #{e.message}"
+      @conn
+    else
+      raise "Unable to connect to database \"#{dbname}\""
     end
   end
 
@@ -17,7 +18,7 @@ module Db
   end
 
   def substitution_text_for set_id, key
-    connect unless @conn
+    connect(settings('dbname')) unless @conn
     res = @substitutions.where(:set_id => set_id, :key => key).select(:value)
     res.get(:value)
   end
