@@ -8,13 +8,33 @@ insert into document_sets ("id", "name", "description")
 insert into document_sets ("id", "name", "description")
 	values (2, "gcpd", "Gotham City Police Department");
 
+/* Documents */
+drop table if exists "documents";
+create table if not exists "documents" (
+    "set_id" integer not null,
+    "document_name" varchar(256) not null,
+    "path" varchar(256) not null);
+
+/* Default documents */
+insert into documents ("set_id", "document_name", "path")
+	values (1, "Test document one", "dir1/doc1.txt");
+insert into documents ("set_id", "document_name", "path")
+	values (1, "Test document two", "dir1/doc2.txt");
+
+/* Gotham City Police Department documents */
+insert into documents ("set_id", "document_name", "path")
+	values (2, "GCPD document one", "gcpd/doc1.txt");
+insert into documents ("set_id", "document_name", "path")
+	values (2, "GCPD document two", "gcpd/doc2.txt");
+
+/* Substitutions */
 drop table if exists "substitutions";
 create table if not exists "substitutions" (
     "set_id" integer not null,
     "key" varchar(128) not null,
     "value" varchar(128) not null);
 
-/* Defaults */
+/* Default substitutions */
 insert into substitutions ("set_id", "key", "value") 
 	values ("default", "client name", "LeadingAgile");
 insert into substitutions ("set_id", "key", "value") 
