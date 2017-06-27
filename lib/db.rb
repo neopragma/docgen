@@ -21,8 +21,10 @@ module Db
 
   def substitution_text_for set_id, key
     auto_connect
-    res = @substitutions.where(:set_id => set_id, :key => key).select(:value)
-    res.get(:value)
+    res = @substitutions
+      .where(:set_id => set_id, :key => key)
+      .select(:value)
+      .get(:value)
   end
 
   def default_artifacts
