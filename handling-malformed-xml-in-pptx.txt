@@ -1,0 +1,85 @@
+pptx file contains this malformed xml in member presentation.xml:
+
+<p:presentation>
+  <p:sldMasterIdLst>
+    <p:sldMasterId id="2147483648" r:id="rId2"/>
+  </p:sldMasterIdLst>
+  <p:sldIdLst>
+    <p:sldId id="256" r:id="rId3"/>
+    <p:sldId id="257" r:id="rId4"/>
+    <p:sldId id="258" r:id="rId5"/>
+    <p:sldId id="259" r:id="rId6"/>
+    <p:sldId id="260" r:id="rId7"/>
+    <p:sldId id="261" r:id="rId8"/>
+  </p:sldIdLst>
+  <p:sldSz cx="12192000" cy="6858000"/>
+  <p:notesSz cx="7772400" cy="10058400"/>
+</p:presentation>
+
+It's malformed because there are no namespace declarations. Nokogiri can't handle that.
+
+Notes for dealing with it:
+
+0. Extract the presentation.xml entry from the pptx package using rubyzip
+
+package.extract('ppt/presentation.xml', some-file-name)
+
+1. Get the raw text from the extracted file. Remove newlines as these will be converted into useless XML text nodes by Nokogiri.
+
+raw = IO.read(some-file-name).gsub(/\n/,'')
+
+2. Replace the namespace prefix delimiters with plain text so Nokogiri can process the XML. This will change 'p:presentation' to 'p__presentation' and so forth. This is a workaround for the fact the namespaces aren't declared in the presentation.xml file.
+
+mod = raw.gsub(/:/,'__')
+
+3. Make a Nokogiri document out of the munged XML text.
+
+xml = Nokogiri::XML(mod)
+
+4. Get the last sldId element in the document. Get the last node from the Nodeset and then the last Element in that node. You end up with a Nokogiri Element. 
+
+last_sldId_element = xml.xpath("//p__presentation/p__sldIdLst").last.last_element_child
+
+At this point, 'puts last_sldId_element' should return something like this:
+
+<p__sldId id="261" r__id="rId8"/>
+
+5. Now save the id value as an integer.   
+
+last_sldId_id_value = last_sldId_element['id'].to_i
+
+6. Save the number at the end of the r:id value as an integer. The value looks like 'rId8'.
+
+last_sldId_rid_value = last_sldId_element['r__id']
+last_sldId_rid_value = last_sldId_rid_value[3..last_sldId_rid_value.length].to_i
+
+6. For each additional slide that was added to the deck:
+
+6.1. Increment the id value
+
+last_sldId_idvalue += 1
+
+6.2. Increment the r:id value and save it as a string
+
+last_sldId_rid_value += 1
+sldId_rid_value_str = 'rId' + last_sldId_rid_value.to_s
+
+6.2. Make a new child element under <p__presentation><p__sldIdLst>
+
+sldId_node = Nokogiri::XML::Node.new('p__sldId',xml)
+sldId_node['id'] = last_sldId_id_value.to_s
+sldId_node['r__id'] = sldId_rid_value_str
+xml.xpath("//p__presentation/p__sldIdLst").add_next_child(sldId_node)
+
+----
+
+Now we need to replace the presentation.xml entry in the pptx with the modified one.
+
+7. Reverse the string replacement to restore the namespace prefixes
+
+updated_xml = xml.to_s.gsub(/__/,':')
+
+
+
+
+

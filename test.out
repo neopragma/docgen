@@ -1,0 +1,660 @@
+/Users/neopragma/.rbenv/versions/2.4.1/bin/ruby -I/Users/neopragma/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/rspec-support-3.6.0/lib:/Users/neopragma/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/rspec-core-3.6.0/lib /Users/neopragma/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/rspec-core-3.6.0/exe/rspec --pattern spec/\*\*\{,/\*/\*\*\}/\*_spec.rb
+
+Error handling
+  raises RuntimeError when an undefined file type processor is specified
+  raises RuntimeError when an unsupported output format is specified
+  raises RuntimeError when the specified template file can't be found
+
+Microsoft PowerPoint (.pptx) manipulation
+  text replacement on slides
+    replaces placeholders with custom text on all slides (in zipped pptx)
+  theme replacement in powerpoint packages
+    replaces the theme in a powerpoint presentation from another pptx
+    replaces the theme in a powerpoint presentation from a potx template file
+  slide insertion in powerpoint packages
+======================================================
+slide_index is 0
+looking for Test deck
+it matched
+======================================================
+slide_index is 1
+looking for Base slide 1
+it matched
+======================================================
+slide_index is 2
+looking for Insertion point 1
+it matched
+======================================================
+slide_index is 3
+looking for Group 1 slide 1
+    inserts slides at defined insertion points in the pptx file (FAILED - 1)
+
+Managing configuration settings
+  loads configuration settings
+
+Structural attributes
+  has a version number
+
+Basic text substitution
+  text output
+    outputs plain text with no substitutions
+    outputs plain text with one substitution in the middle
+    outputs plain text with one substitution at the beginning
+    outputs plain text with one substitution at the end
+    outputs plain text with two substitutions
+    outputs plain text with substitutions specific to a named set
+  html output
+    outputs a single html paragraph with no substitutions
+    outputs some assorted html elements with no substitutions
+    outputs some assorted html elements with substitutions
+    outputs an html document with substitutions
+  latex output
+    outputs a single latex paragraph with no substitutions
+    outputs some assorted latex elements with no substitutions
+    outputs some assorted latex elements with substitutions
+    outputs a latex document with substitutions
+  pdf output
+    outputs a pdf document with substitutions
+
+Failures:
+
+  1) Microsoft PowerPoint (.pptx) manipulation slide insertion in powerpoint packages inserts slides at defined insertion points in the pptx file
+     Failure/Error: expect(current_slide).to match /#{expected_slide_order[slide_index]}/
+
+       expected #<Nokogiri::XML::Document:0x3ff4dd1eaa34 name="document" children=[#<Nokogiri::XML::Element:0x3ff4dd1...">]>, #<Nokogiri::XML::Text:0x3ff4dd1ae7a0 "\n  ">]>, #<Nokogiri::XML::Text:0x3ff4dd1ae4a8 "\n">]>]> to match /Group 1 slide 1/
+       Diff:
+       @@ -1,2 +1,583 @@
+       -/Group 1 slide 1/
+       +#(Document:0x3ff4dd1eaa34 {
+       +  name = "document",
+       +  children = [
+       +    #(Element:0x3ff4dd1ea5ac {
+       +      name = "sld",
+       +      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +        prefix = "p",
+       +        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +        }),
+       +      children = [
+       +        #(Text "\n" + "  "),
+       +        #(Element:0x3ff4dd1ea994 {
+       +          name = "cSld",
+       +          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +            prefix = "p",
+       +            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +            }),
+       +          children = [
+       +            #(Text "\n" + "    "),
+       +            #(Element:0x3ff4dd1e7aa0 {
+       +              name = "spTree",
+       +              namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                prefix = "p",
+       +                href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                }),
+       +              children = [
+       +                #(Text "\n" + "      "),
+       +                #(Element:0x3ff4dd1e74ec {
+       +                  name = "nvGrpSpPr",
+       +                  namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                    prefix = "p",
+       +                    href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                    }),
+       +                  children = [
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1e6ca4 {
+       +                      name = "cNvPr",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        }),
+       +                      attributes = [
+       +                        #(Attr:0x3ff4dd1e6bf0 { name = "id", value = "1" }),
+       +                        #(Attr:0x3ff4dd1e6bc8 { name = "name", value = "" })]
+       +                      }),
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1e3c20 {
+       +                      name = "cNvGrpSpPr",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        })
+       +                      }),
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1e307c {
+       +                      name = "nvPr",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        })
+       +                      }),
+       +                    #(Text "\n" + "      ")]
+       +                  }),
+       +                #(Text "\n" + "      "),
+       +                #(Element:0x3ff4dd1e258c {
+       +                  name = "grpSpPr",
+       +                  namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                    prefix = "p",
+       +                    href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                    }),
+       +                  children = [
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1dfb34 {
+       +                      name = "xfrm",
+       +                      namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                        prefix = "a",
+       +                        href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                        }),
+       +                      children = [
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1deef0 {
+       +                          name = "off",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            }),
+       +                          attributes = [
+       +                            #(Attr:0x3ff4dd1dee8c { name = "x", value = "0" }),
+       +                            #(Attr:0x3ff4dd1dee78 { name = "y", value = "0" })]
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1dbda4 {
+       +                          name = "ext",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            }),
+       +                          attributes = [
+       +                            #(Attr:0x3ff4dd1dbd18 {
+       +                              name = "cx",
+       +                              value = "0"
+       +                              }),
+       +                            #(Attr:0x3ff4dd1dbd04 {
+       +                              name = "cy",
+       +                              value = "0"
+       +                              })]
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1dad28 {
+       +                          name = "chOff",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            }),
+       +                          attributes = [
+       +                            #(Attr:0x3ff4dd1dacb0 { name = "x", value = "0" }),
+       +                            #(Attr:0x3ff4dd1dac60 { name = "y", value = "0" })]
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1d7c2c {
+       +                          name = "chExt",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            }),
+       +                          attributes = [
+       +                            #(Attr:0x3ff4dd1d7bc8 {
+       +                              name = "cx",
+       +                              value = "0"
+       +                              }),
+       +                            #(Attr:0x3ff4dd1d7bb4 {
+       +                              name = "cy",
+       +                              value = "0"
+       +                              })]
+       +                          }),
+       +                        #(Text "\n" + "        ")]
+       +                      }),
+       +                    #(Text "\n" + "      ")]
+       +                  }),
+       +                #(Text "\n" + "      "),
+       +                #(Element:0x3ff4dd1d6700 {
+       +                  name = "sp",
+       +                  namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                    prefix = "p",
+       +                    href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                    }),
+       +                  children = [
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1d614c {
+       +                      name = "nvSpPr",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        }),
+       +                      children = [
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1d3b7c {
+       +                          name = "cNvPr",
+       +                          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                            prefix = "p",
+       +                            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                            }),
+       +                          attributes = [
+       +                            #(Attr:0x3ff4dd1d3ab4 {
+       +                              name = "id",
+       +                              value = "2"
+       +                              }),
+       +                            #(Attr:0x3ff4dd1d3a8c {
+       +                              name = "name",
+       +                              value = "Title 1"
+       +                              })]
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1d2d08 {
+       +                          name = "cNvSpPr",
+       +                          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                            prefix = "p",
+       +                            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                            }),
+       +                          children = [
+       +                            #(Text "\n" + "            "),
+       +                            #(Element:0x3ff4dd1d2754 {
+       +                              name = "spLocks",
+       +                              namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                                prefix = "a",
+       +                                href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                                }),
+       +                              attributes = [
+       +                                #(Attr:0x3ff4dd1d26f0 {
+       +                                  name = "noGrp",
+       +                                  value = "1"
+       +                                  })]
+       +                              }),
+       +                            #(Text "\n" + "          ")]
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1cfc84 {
+       +                          name = "nvPr",
+       +                          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                            prefix = "p",
+       +                            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                            }),
+       +                          children = [
+       +                            #(Text "\n" + "            "),
+       +                            #(Element:0x3ff4dd1cf6e4 {
+       +                              name = "ph",
+       +                              namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                                prefix = "p",
+       +                                href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                                }),
+       +                              attributes = [
+       +                                #(Attr:0x3ff4dd1cf680 {
+       +                                  name = "type",
+       +                                  value = "ctrTitle"
+       +                                  })]
+       +                              }),
+       +                            #(Text "\n" + "          ")]
+       +                          }),
+       +                        #(Text "\n" + "        ")]
+       +                      }),
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1cea50 {
+       +                      name = "spPr",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        })
+       +                      }),
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1ce500 {
+       +                      name = "txBody",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        }),
+       +                      children = [
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1cbf6c {
+       +                          name = "bodyPr",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            })
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1cba1c {
+       +                          name = "lstStyle",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            })
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1cb4e0 {
+       +                          name = "p",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            }),
+       +                          children = [
+       +                            #(Text "\n" + "            "),
+       +                            #(Element:0x3ff4dd1cafa4 {
+       +                              name = "r",
+       +                              namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                                prefix = "a",
+       +                                href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                                }),
+       +                              children = [
+       +                                #(Text "\n" + "              "),
+       +                                #(Element:0x3ff4dd1caa7c {
+       +                                  name = "rPr",
+       +                                  namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                                    prefix = "a",
+       +                                    href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                                    }),
+       +                                  attributes = [
+       +                                    #(Attr:0x3ff4dd1caa18 {
+       +                                      name = "lang",
+       +                                      value = "en-US"
+       +                                      }),
+       +                                    #(Attr:0x3ff4dd1caa04 {
+       +                                      name = "dirty",
+       +                                      value = "0"
+       +                                      }),
+       +                                    #(Attr:0x3ff4dd1ca9f0 {
+       +                                      name = "smtClean",
+       +                                      value = "0"
+       +                                      })]
+       +                                  }),
+       +                                #(Text "\n" + "              "),
+       +                                #(Element:0x3ff4dd1c7e08 {
+       +                                  name = "t",
+       +                                  namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                                    prefix = "a",
+       +                                    href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                                    }),
+       +                                  children = [ #(Text "Base slide 2")]
+       +                                  }),
+       +                                #(Text "\n" + "            ")]
+       +                              }),
+       +                            #(Text "\n" + "            "),
+       +                            #(Element:0x3ff4dd1c7570 {
+       +                              name = "endParaRPr",
+       +                              namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                                prefix = "a",
+       +                                href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                                }),
+       +                              attributes = [
+       +                                #(Attr:0x3ff4dd1c74f8 {
+       +                                  name = "lang",
+       +                                  value = "en-US"
+       +                                  }),
+       +                                #(Attr:0x3ff4dd1c74e4 {
+       +                                  name = "dirty",
+       +                                  value = "0"
+       +                                  })]
+       +                              }),
+       +                            #(Text "\n" + "          ")]
+       +                          }),
+       +                        #(Text "\n" + "        ")]
+       +                      }),
+       +                    #(Text "\n" + "      ")]
+       +                  }),
+       +                #(Text "\n" + "      "),
+       +                #(Element:0x3ff4dd1c3bb4 {
+       +                  name = "sp",
+       +                  namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                    prefix = "p",
+       +                    href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                    }),
+       +                  children = [
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1c363c {
+       +                      name = "nvSpPr",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        }),
+       +                      children = [
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1c30ec {
+       +                          name = "cNvPr",
+       +                          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                            prefix = "p",
+       +                            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                            }),
+       +                          attributes = [
+       +                            #(Attr:0x3ff4dd1c3060 {
+       +                              name = "id",
+       +                              value = "4"
+       +                              }),
+       +                            #(Attr:0x3ff4dd1c3038 {
+       +                              name = "name",
+       +                              value = "Subtitle 3"
+       +                              })]
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1c2408 {
+       +                          name = "cNvSpPr",
+       +                          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                            prefix = "p",
+       +                            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                            }),
+       +                          children = [
+       +                            #(Text "\n" + "            "),
+       +                            #(Element:0x3ff4dd1bfcbc {
+       +                              name = "spLocks",
+       +                              namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                                prefix = "a",
+       +                                href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                                }),
+       +                              attributes = [
+       +                                #(Attr:0x3ff4dd1bfc58 {
+       +                                  name = "noGrp",
+       +                                  value = "1"
+       +                                  })]
+       +                              }),
+       +                            #(Text "\n" + "          ")]
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1bf26c {
+       +                          name = "nvPr",
+       +                          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                            prefix = "p",
+       +                            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                            }),
+       +                          children = [
+       +                            #(Text "\n" + "            "),
+       +                            #(Element:0x3ff4dd1beb50 {
+       +                              name = "ph",
+       +                              namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                                prefix = "p",
+       +                                href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                                }),
+       +                              attributes = [
+       +                                #(Attr:0x3ff4dd1beab0 {
+       +                                  name = "type",
+       +                                  value = "subTitle"
+       +                                  }),
+       +                                #(Attr:0x3ff4dd1bea9c {
+       +                                  name = "idx",
+       +                                  value = "1"
+       +                                  })]
+       +                              }),
+       +                            #(Text "\n" + "          ")]
+       +                          }),
+       +                        #(Text "\n" + "        ")]
+       +                      }),
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1bbba8 {
+       +                      name = "spPr",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        })
+       +                      }),
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1bb644 {
+       +                      name = "txBody",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        }),
+       +                      children = [
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1bb0cc {
+       +                          name = "bodyPr",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            })
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1baba4 {
+       +                          name = "lstStyle",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            })
+       +                          }),
+       +                        #(Text "\n" + "          "),
+       +                        #(Element:0x3ff4dd1ba62c {
+       +                          name = "p",
+       +                          namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                            prefix = "a",
+       +                            href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                            }),
+       +                          children = [
+       +                            #(Text "\n" + "            "),
+       +                            #(Element:0x3ff4dd1ba08c {
+       +                              name = "endParaRPr",
+       +                              namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                                prefix = "a",
+       +                                href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                                }),
+       +                              attributes = [
+       +                                #(Attr:0x3ff4dd1ba014 {
+       +                                  name = "lang",
+       +                                  value = "en-US"
+       +                                  })]
+       +                              }),
+       +                            #(Text "\n" + "          ")]
+       +                          }),
+       +                        #(Text "\n" + "        ")]
+       +                      }),
+       +                    #(Text "\n" + "      ")]
+       +                  }),
+       +                #(Text "\n" + "    ")]
+       +              }),
+       +            #(Text "\n" + "    "),
+       +            #(Element:0x3ff4dd1b7148 {
+       +              name = "extLst",
+       +              namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                prefix = "p",
+       +                href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                }),
+       +              children = [
+       +                #(Text "\n" + "      "),
+       +                #(Element:0x3ff4dd1b6bbc {
+       +                  name = "ext",
+       +                  namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                    prefix = "p",
+       +                    href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                    }),
+       +                  attributes = [
+       +                    #(Attr:0x3ff4dd1b6b58 {
+       +                      name = "uri",
+       +                      value = "{BB962C8B-B14F-4D97-AF65-F5344CB8AC3E}"
+       +                      })],
+       +                  children = [
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1b63c4 {
+       +                      name = "creationId",
+       +                      namespace = #(Namespace:0x3ff4dd1b6360 {
+       +                        prefix = "p14",
+       +                        href = "http://schemas.microsoft.com/office/powerpoint/2010/main"
+       +                        }),
+       +                      attributes = [
+       +                        #(Attr:0x3ff4dd1b6338 {
+       +                          name = "val",
+       +                          value = "444953348"
+       +                          })]
+       +                      }),
+       +                    #(Text "\n" + "      ")]
+       +                  }),
+       +                #(Text "\n" + "    ")]
+       +              }),
+       +            #(Text "\n" + "  ")]
+       +          }),
+       +        #(Text "\n" + "  "),
+       +        #(Element:0x3ff4dd1b3624 {
+       +          name = "clrMapOvr",
+       +          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +            prefix = "p",
+       +            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +            }),
+       +          children = [
+       +            #(Text "\n" + "    "),
+       +            #(Element:0x3ff4dd1b3124 {
+       +              name = "masterClrMapping",
+       +              namespace = #(Namespace:0x3ff4dd1dfa44 {
+       +                prefix = "a",
+       +                href = "http://schemas.openxmlformats.org/drawingml/2006/main"
+       +                })
+       +              }),
+       +            #(Text "\n" + "  ")]
+       +          }),
+       +        #(Text "\n" + "  "),
+       +        #(Element:0x3ff4dd1b2a30 {
+       +          name = "timing",
+       +          namespace = #(Namespace:0x3ff4dd1ea520 {
+       +            prefix = "p",
+       +            href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +            }),
+       +          children = [
+       +            #(Text "\n" + "    "),
+       +            #(Element:0x3ff4dd1b2508 {
+       +              name = "tnLst",
+       +              namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                prefix = "p",
+       +                href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                }),
+       +              children = [
+       +                #(Text "\n" + "      "),
+       +                #(Element:0x3ff4dd1b201c {
+       +                  name = "par",
+       +                  namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                    prefix = "p",
+       +                    href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                    }),
+       +                  children = [
+       +                    #(Text "\n" + "        "),
+       +                    #(Element:0x3ff4dd1afa60 {
+       +                      name = "cTn",
+       +                      namespace = #(Namespace:0x3ff4dd1ea520 {
+       +                        prefix = "p",
+       +                        href = "http://schemas.openxmlformats.org/presentationml/2006/main"
+       +                        }),
+       +                      attributes = [
+       +                        #(Attr:0x3ff4dd1af9fc { name = "id", value = "1" }),
+       +                        #(Attr:0x3ff4dd1af9e8 {
+       +                          name = "dur",
+       +                          value = "indefinite"
+       +                          }),
+       +                        #(Attr:0x3ff4dd1af9d4 {
+       +                          name = "restart",
+       +                          value = "never"
+       +                          }),
+       +                        #(Attr:0x3ff4dd1af9c0 {
+       +                          name = "nodeType",
+       +                          value = "tmRoot"
+       +                          })]
+       +                      }),
+       +                    #(Text "\n" + "      ")]
+       +                  }),
+       +                #(Text "\n" + "    ")]
+       +              }),
+       +            #(Text "\n" + "  ")]
+       +          }),
+       +        #(Text "\n")]
+       +      })]
+       +  })
+     # ./spec/pptx_manipulation_spec.rb:118:in `block (4 levels) in <top (required)>'
+     # ./spec/pptx_manipulation_spec.rb:110:in `each'
+     # ./spec/pptx_manipulation_spec.rb:110:in `block (3 levels) in <top (required)>'
+
+Finished in 0.28798 seconds (files took 0.44901 seconds to load)
+24 examples, 1 failure
+
+Failed examples:
+
+rspec ./spec/pptx_manipulation_spec.rb:83 # Microsoft PowerPoint (.pptx) manipulation slide insertion in powerpoint packages inserts slides at defined insertion points in the pptx file
+

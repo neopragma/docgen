@@ -1,0 +1,14 @@
+{
+    "folders":
+    [
+        {
+            "name": "docgen project",
+            "path": "./",
+            "follow_symlinks": true
+        }
+    ],
+    "settings":
+    {
+        "tab_size": 2
+    }
+}

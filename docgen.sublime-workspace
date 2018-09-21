@@ -1,0 +1,438 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"background",
+				"background-image"
+			],
+			[
+				"font",
+				"font-family"
+			],
+			[
+				"PATH",
+				"PATH_TO_PPT_RELS"
+			],
+			[
+				"ori",
+				"original_slide_count"
+			],
+			[
+				"sli",
+				"slide_count"
+			],
+			[
+				"modified",
+				"modified_entry_name"
+			],
+			[
+				"temp",
+				"temp_pptx_file"
+			],
+			[
+				"insertion",
+				"insertion_target_pptx"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/neopragma/Documents/projects/docgen",
+		"/Users/neopragma/Documents/projects/docgen/lib",
+		"/Users/neopragma/Documents/projects/docgen/spec",
+		"/Users/neopragma/Documents/projects/docgen/spec/data"
+	],
+	"file_history":
+	[
+		"/Users/neopragma/Documents/projects/bootstrap-debian-9-dev-base/README.md",
+		"/Users/neopragma/Documents/manjaro-notes.txt",
+		"/Users/neopragma/Documents/projects/provision-lightweight-development-environments/README.md",
+		"/Users/neopragma/Documents/projects/bootstrap-manjaro-dev-base/bootstrap",
+		"/Users/neopragma/Documents/projects/bootstrap-manjaro-dev-base/README.md",
+		"/Users/neopragma/Documents/projects/bootstrap-manjaro-dev-base/chef-manjaro-fail.md",
+		"/Users/neopragma/Documents/projects/bootstrap-manjaro-dev-base/openbox-manjaro-fail.md",
+		"/Users/neopragma/Downloads/elizabeth-scott-impressions.txt",
+		"/Users/neopragma/Downloads/samir-morani-impressions.txt",
+		"/Users/neopragma/Documents/projects/minimal-environment/notes.txt",
+		"/Users/neopragma/Documents/projects/minimal-environment/chef-recipes/install-neovim.rb",
+		"/Users/neopragma/Documents/projects/minimal-environment/apt-bash-root/install_neovim",
+		"/Users/neopragma/Documents/projects/minimal-environment/base-general.md",
+		"/Users/neopragma/Documents/projects/minimal-environment/README.md",
+		"/Users/neopragma/Documents/projects/chef-sandbox/chef-notes.txt",
+		"/Users/neopragma/Documents/projects/minimal-environment/base-ubuntu-16.04.md",
+		"/Users/neopragma/Documents/projects/minimal-environment/common-configuration.md",
+		"/Users/neopragma/Documents/Pool Maintenance/pool-maintenance-supplies.txt",
+		"/Users/neopragma/Documents/japanese-words.txt",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-lean-weekends-self-actualization.html",
+		"/Users/neopragma/Documents/projects/rational-politics/topic-index.html",
+		"/Users/neopragma/Documents/projects/rational-politics/styles/default.css",
+		"/Users/neopragma/Documents/projects/rational-politics/two-party-system.html",
+		"/Users/neopragma/Documents/projects/rational-politics/index.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-when-functional-isnt/sumarr.s",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-journeyman/blog-journeyman.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-when-functional-isnt/blog-when-functional-isnt.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-almost-but-not-quite.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/online-coding-environments.html",
+		"/Users/neopragma/Documents/projects/java-poker/src/main/java/com/neopragma/poker/AbstractCard.java",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-away-from-pbt/blog-away-from-pbt.html",
+		"/Users/neopragma/Documents/IoT DevFest 2018 notes.txt",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-ideas.txt",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/value-to-effort-ratio/blog-value-to-effort-ratio.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/frameworks-magic.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-immutable-servers.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-testing-in-the-mob.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-first-step-in-legacy-remediation.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-practicing-legacy-remediation.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-one-repo.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/governance-and-agility.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-journeyman.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-when-functional-isnt.html",
+		"/Users/neopragma/Documents/LeadingAgile/Field Notes/blog-java-immutable.html",
+		"/Users/neopragma/Documents/LeadingAgile/Interview Notes/ralph-hale-12-dec-2017.txt",
+		"/Users/neopragma/Documents/blog-lean-weekends-self-actualization.html",
+		"/Users/neopragma/Documents/blog-tools-for-ui-api-testing.html",
+		"/Users/neopragma/Documents/blog-lead-weekends-self-actualization.html",
+		"/Volumes/My Passport/Virtual Machines/Production/Cucumber Examples (Debian 9)/README.txt",
+		"/Volumes/My Passport/Virtual Machines/Cucumber Examples (Ubuntu 12.04.3 LTS 64-bit)/Paragon NTFS for Mac 15.txt",
+		"/Volumes/My Passport/Neo Pragma LLC/Operations/Software License Keys/vmware-fusion-10-license-key.txt",
+		"/Volumes/My Passport/Neo Pragma LLC/Operations/Software License Keys/paragon-ntfs-for-mac-15-license-key.txt",
+		"/Users/neopragma/Documents/xpdays-benelux-report.txt",
+		"/Users/neopragma/Documents/technical-screening-notes.txt",
+		"/Users/neopragma/Documents/technical-screening-process.txt",
+		"/Users/neopragma/Documents/blog-almost-but-not-quite.html",
+		"/Users/neopragma/Documents/reliable-large-scale-microservices-systems.html",
+		"/Users/neopragma/Documents/Network Information/dns-addresses.txt",
+		"/Users/neopragma/Documents/reliable-large-scale-microservices-systems.txt",
+		"/Users/neopragma/Documents/ford-mixed-messages.txt",
+		"/Users/neopragma/Documents/projects/apimock/features/bad_requests.feature",
+		"/Users/neopragma/Documents/projects/apimock/apimock.gemspec",
+		"/Users/neopragma/Documents/projects/apimock/features/step_definitions/bad_requests_steps.rb",
+		"/Users/neopragma/Documents/projects/apimock/features/step_definitions/general_steps.rb",
+		"/Users/neopragma/Documents/projects/apimock/.gitignore",
+		"/Users/neopragma/Documents/projects/apimock/lib/apimock.rb",
+		"/Users/neopragma/Documents/projects/apimock/README.md",
+		"/Users/neopragma/Documents/projects/apimock/config.ru",
+		"/Users/neopragma/Documents/projects/apimock/features/support/env.rb",
+		"/Users/neopragma/Documents/projects/apimock/features/step_definitions/usage_help_steps.rb",
+		"/Users/neopragma/Documents/projects/apimock/features/usage_help.feature",
+		"/Users/neopragma/Documents/projects/apimock/spec/apimock_spec.rb",
+		"/Users/neopragma/Documents/projects/apimock/features/step_definitions/# bad_requests_steps.rb",
+		"/Users/neopragma/Documents/projects/apimock/lib/unsupported_mime_type.rb",
+		"/Users/neopragma/Documents/projects/sandbox/apimock.rb",
+		"/Users/neopragma/Documents/projects/sandbox/config.ru",
+		"/Users/neopragma/Documents/projects/sandbox/Gemfile",
+		"/Users/neopragma/Documents/projects/apimock/LICENSE.txt",
+		"/Users/neopragma/Documents/projects/apimock/Gemfile",
+		"/Users/neopragma/Documents/understanding-lean-thinking.html",
+		"/Users/neopragma/Documents/visual-studio-code-notes.txt",
+		"/Users/neopragma/Documents/2017-09-08-call-notes.txt",
+		"/Users/neopragma/Documents/hybrid-test-driven-development.html",
+		"/Users/neopragma/Documents/in-favor-of-pairing.html",
+		"/Users/neopragma/Documents/projects/brutalist-resume/resume.html",
+		"/Users/neopragma/Documents/matt-fisher-txt",
+		"/Users/neopragma/Downloads/RESTclient/RESTclient.cbl",
+		"/Users/neopragma/Documents/blog-post-ideas.txt",
+		"/Users/neopragma/Documents/lochbridge-daves-observations",
+		"/Users/neopragma/Documents/travel-info.txt",
+		"/Users/neopragma/Downloads/2017-07-30-hotel-cancellation-number.txt",
+		"/Users/neopragma/Documents/principled-process.html",
+		"/Users/neopragma/Documents/how-to-pass-screening.html",
+		"/Users/neopragma/Documents/basic-developer-setup.html",
+		"/Users/neopragma/Documents/software-design-guidelines.md",
+		"/Users/neopragma/Documents/micromanagers-guide-to-self-organizing-teams.html",
+		"/Users/neopragma/Documents/self-organizing-teams-guide-to-micromanagers.html",
+		"/Users/neopragma/Documents/managers-guide-to-self-organization.html",
+		"/Users/neopragma/Documents/managers-choose-your-outcomes.html",
+		"/Users/neopragma/Documents/tarkin-effect.html",
+		"/Users/neopragma/Documents/principles-and-rules.html",
+		"/Users/neopragma/Documents/strategic-vs-tactical-assets.html",
+		"/Users/neopragma/Documents/replaceability.html",
+		"/Users/neopragma/Documents/measuring-improvement.html",
+		"/Users/neopragma/Documents/powerpoint-template.txt",
+		"/Users/neopragma/Documents/job-confirmation-code.txt",
+		"/Users/neopragma/Documents/for-sale.txt",
+		"/Users/neopragma/Documents/failure.html",
+		"/Users/neopragma/Documents/the-10x-developer.html",
+		"/Users/neopragma/Documents/software-crafsmanship-in-context.html",
+		"/Users/neopragma/Documents/what-is-software-craftsmanship.html",
+		"/Users/neopragma/Documents/false-economy-of-no-change.html",
+		"/Users/neopragma/Documents/update-thinking.html",
+		"/Users/neopragma/Documents/least-resistance.html",
+		"/Users/neopragma/Documents/cant-use-user-stories.html",
+		"/Users/neopragma/Documents/projects/docgen/spec/error_handling_spec.rb",
+		"/Users/neopragma/Documents/projects/docgen/lib/slide_set.rb",
+		"/Users/neopragma/Documents/projects/docgen/handling-malformed-xml-in-pptx.txt",
+		"/Users/neopragma/Documents/projects/docgen/presentation.xml",
+		"/Users/neopragma/Documents/projects/docgen/temp.xml",
+		"/Users/neopragma/Documents/projects/docgen/lib/process_pptx.rb",
+		"/Users/neopragma/Documents/projects/docgen/docgen.gemspec",
+		"/Users/neopragma/Documents/Valencia Photos/Captioned/novelty-1.html",
+		"/Users/neopragma/Documents/projects/docgen/spec/pptx_manipulation_spec.rb",
+		"/Users/neopragma/Documents/projects/docgen/lib/docgen.rb",
+		"/Users/neopragma/Documents/chrome_xxd.py",
+		"/Users/neopragma/Documents/Valencia Photos/Captioned/base.css",
+		"/Users/neopragma/Documents/Valencia Photos/Captioned/pics.html"
+	],
+	"find":
+	{
+		"height": 30.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"ruby",
+			"unt",
+			"\"",
+			"@data",
+			"Org xform",
+			"lug",
+			"’",
+			"‘",
+			"”",
+			"“",
+			"puts ",
+			"chomp",
+			"FileUtils.rm",
+			"ppt/slides/_rels",
+			"@tempdir",
+			"@slides_start_with",
+			" slide_count",
+			"chomp",
+			"chomp[",
+			"Test deck",
+			"<a:t>",
+			"title=",
+			"'default',",
+			":set => 'gcpd',",
+			":set => 'default',",
+			"(\"set\",",
+			"docgen.gen(",
+			" - ",
+			"being see",
+			" - ",
+			"preserve",
+			"possibly",
+			" - ",
+			"five",
+			"Tazh",
+			"forth",
+			"Lana",
+			"resume",
+			"Br",
+			"Lana",
+			"not stu",
+			"br",
+			"Lana",
+			"&nbsp;",
+			"non-break",
+			"eshavara",
+			"taa balashir",
+			"br",
+			"nva",
+			"thought.",
+			"br",
+			"pupil",
+			"the day came",
+			"one might",
+			"Br",
+			"the day came",
+			"At least,",
+			"At least",
+			"Sila",
+			"Tazh",
+			"-legs",
+			"Azhreth",
+			"Br",
+			"I have sent ten",
+			"Bosh",
+			"Taber",
+			"longer",
+			"bolo",
+			"People",
+			"bolo",
+			"People",
+			"bolo",
+			"Hill",
+			"tarran",
+			"_tarran_",
+			"life has gone on",
+			"bolo",
+			"ship",
+			"Here's what we need in ",
+			"###"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"'",
+			"GlobalState[:data]",
+			"Organizational improvement",
+			"stud",
+			"'",
+			"\"",
+			"PATH_TO_SLIDE_RELS",
+			"TEMPDIR",
+			"SLIDES_START_WITH",
+			" @slide_count",
+			"1,",
+			":set_id => 2,",
+			":set_id => 1,",
+			"(\"set_id\",",
+			"--",
+			".",
+			"Sira",
+			"legs",
+			"bola",
+			"Djonda",
+			"bola",
+			"Djonda",
+			"bola",
+			"_tarran_",
+			"tarran",
+			"bola",
+			"asset"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 30.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "docgen.sublime-project",
+	"replace":
+	{
+		"height": 56.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 378.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -16,12 +16,12 @@ Gem::Specification.new do |spec|
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against " \
-      "public gem pushes."
-  end
+  # if spec.respond_to?(:metadata)
+  #   spec.metadata['allowed_push_host'] = "http://localhost"
+  # else
+  #   raise "RubyGems 2.0 or newer is required to protect against " \
+  #     "public gem pushes."
+  # end
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
@@ -36,8 +36,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sqlite3", "~> 1.3"
   spec.add_dependency "sequel", "~> 4.43"
   spec.add_dependency "kramdown", "~> 1.13"
-  spec.add_dependency "nokogiri", "~> 1.7.2"
+  spec.add_dependency "nokogiri", "~> 1.7"
   spec.add_dependency "prawn", "~> 2.1"
   spec.add_dependency "prawn-table", "~> 0.2"
-  spec.add_dependency "rubyzip", "~> 1.2.1"
+  spec.add_dependency "rubyzip", "~> 1.2"
 end
