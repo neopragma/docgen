@@ -8,48 +8,84 @@ insert into document_sets ("id", "name", "description")
 insert into document_sets ("id", "name", "description")
 	values (2, "gcpd", "Gotham City Police Department");
 
+/* Documents */
+drop table if exists "documents";
+create table if not exists "documents" (
+    "set_id" integer not null,
+    "document_name" varchar(256) not null,
+    "path" varchar(256) not null);
+
+/* Default documents */
+insert into documents ("set_id", "document_name", "path")
+	values (1, "Test document one", "dir1/doc1.txt");
+insert into documents ("set_id", "document_name", "path")
+	values (1, "Test document two", "dir1/doc2.txt");
+
+/* Gotham City Police Department documents */
+insert into documents ("set_id", "document_name", "path")
+	values (2, "GCPD document one", "gcpd/doc1.txt");
+insert into documents ("set_id", "document_name", "path")
+	values (2, "GCPD document two", "gcpd/doc2.txt");
+
+/* Substitutions */
 drop table if exists "substitutions";
 create table if not exists "substitutions" (
     "set_id" integer not null,
     "key" varchar(128) not null,
     "value" varchar(128) not null);
 
-/* Defaults */
+/* Default substitutions */
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "client name", "LeadingAgile");
+	values (1, "bullet1", "Custom bullet point one");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "tlt", "Transformation Leadership Team");
+	values (1, "bullet2", "Custom bullet point two");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "ivt", "Innovation and Verification Team");
+	values (1, "bullet3", "Custom bullet point three");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "value stream", "Line of Business");
+	values (1, "client name", "Mom and Pop Stores");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "portfolio team", "Portfolio Team");
+	values (1, "copyright notice", "Copyright © 2017");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "program team", "Program Team");
+	values (1, "tlt", "Transformation Leadership Team");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "delivery team", "Delivery Team");
+	values (1, "ivt", "Innovation and Verification Team");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "iteration", "Sprint");
+	values (1, "value stream", "Line of Business");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "product owner", "Product Owner");
+	values (1, "portfolio team", "Portfolio Team");
+insert into substitutions ("set_id", "key", "value") 
+	values (1, "program team", "Program Team");
+insert into substitutions ("set_id", "key", "value") 
+	values (1, "delivery team", "Delivery Team");
+insert into substitutions ("set_id", "key", "value") 
+	values (1, "iteration", "Sprint");
+insert into substitutions ("set_id", "key", "value") 
+	values (1, "product owner", "Product Owner");
+insert into substitutions ("set_id", "key", "value") 
+	values (1, "foo", "amazing");
+insert into substitutions ("set_id", "key", "value") 
+	values (1, "bar", "dismal");
 
 /* Gotham City Police Department */
 insert into substitutions ("set_id", "key", "value") 
-	values ("gcpd", "client name", "Gotham City Police Dept.");
+	values (2, "client name", "Gotham City Police Dept.");
 insert into substitutions ("set_id", "key", "value") 
-	values ("gcpd", "tlt", "Improvement Guidance Committee");
+	values (2, "tlt", "Improvement Guidance Committee");
 insert into substitutions ("set_id", "key", "value") 
-	values ("default", "ivt", "Architectural Guidance Committee");
+	values (2, "ivt", "Architectural Guidance Committee");
 insert into substitutions ("set_id", "key", "value") 
-	values ("gcpd", "value stream", "Product Line");
+	values (2, "value stream", "Product Line");
 insert into substitutions ("set_id", "key", "value") 
-	values ("gcpd", "portfolio team", "Product Line Team");
+	values (2, "portfolio team", "Product Line Team");
 insert into substitutions ("set_id", "key", "value") 
-	values ("gcpd", "program team", "Coordination Team");
+	values (2, "program team", "Coordination Team");
 insert into substitutions ("set_id", "key", "value") 
-	values ("gcpd", "delivery team", "Development Pod");
+	values (2, "delivery team", "Development Pod");
 insert into substitutions ("set_id", "key", "value") 
-	values ("gcpd", "iteration", "Development Cadence");
+	values (2, "iteration", "Development Cadence");
 insert into substitutions ("set_id", "key", "value") 
-	values ("gcpd", "product owner", "Capability Owner");
+	values (2, "product owner", "Capability Owner");
+insert into substitutions ("set_id", "key", "value") 
+	values (2, "foo", "Batman");
+insert into substitutions ("set_id", "key", "value") 
+	values (2, "bar", "Penguin");

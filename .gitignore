@@ -12,3 +12,5 @@ temp.out
 /spec/reports/
 /tmp/
 .DS_Store
+devinit.log
+docgen

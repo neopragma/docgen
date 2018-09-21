@@ -1,4 +1,5 @@
 require "spec_helper"
+require_relative "./docgen_test"
 
 describe 'Managing configuration settings' do
 
@@ -8,6 +9,10 @@ describe 'Managing configuration settings' do
 
   it 'loads configuration settings' do
     expect(@docgen.settings('ziptemp')).to eq('ziptemp')
+  end
+
+  it 'retrieves database name' do
+    expect(@docgen.settings('dbname')).to eq('docgen')
   end
 
 end
